@@ -15,7 +15,7 @@ export function Hero() {
 
   return (
     <section id="inicio" className="wrap pt-12 pb-16 sm:pt-16 lg:pt-24">
-      <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
+      <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-10">
         <div>
           <p className="mb-6 inline-flex max-w-full items-center rounded-md border border-line bg-surface px-3 py-1.5 font-mono text-[13px]">
             <span className="truncate">
@@ -27,9 +27,16 @@ export function Hero() {
             </span>
           </p>
 
-          <h1 className="text-[clamp(3.25rem,13vw,7.5rem)] leading-[0.95] font-bold tracking-tighter">
-            <span className="block">{t.hero.name1}</span>
-            <span className="block text-accent">{t.hero.name2}</span>
+          {/* O nome responde ao "whoami" acima; o destaque grande é o que ele faz. */}
+          <h1>
+            <span className="mb-4 flex items-center gap-3 text-xl font-semibold tracking-tight text-text/90 sm:text-2xl">
+              <span className="h-px w-8 bg-accent" aria-hidden="true" />
+              {t.hero.name}
+            </span>
+            <span className="block text-[clamp(2.25rem,5.4vw,3.3rem)] leading-[1.02] font-bold tracking-tighter">
+              <span className="block">{t.hero.headline1}</span>
+              <span className="block text-accent">{t.hero.headline2}</span>
+            </span>
           </h1>
 
           <p className="mt-6 min-h-8 font-mono text-base text-accent sm:text-xl">

@@ -64,7 +64,7 @@ function siteChunks(): Draft[] {
     draft(
       'hero',
       'sobre',
-      `${pt.hero.name1} ${pt.hero.name2} Foco atual: ${pt.hero.roles.join('; ')}. ${pt.hero.lede} ${pt.hero.status}.`,
+      `${pt.hero.name}: ${pt.hero.headline1} ${pt.hero.headline2} Foco atual: ${pt.hero.roles.join('; ')}. ${pt.hero.lede} ${pt.hero.status}.`,
     ),
     draft('sobre-resumo', 'sobre', pt.about.lede),
   )

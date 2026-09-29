@@ -67,11 +67,12 @@ export const pt = {
   banner: 'Curioso? O código deste site está no GitHub: {url} · Pergunte ao terminal: digite help',
   hero: {
     whoami: 'whoami',
-    name1: 'Murilo',
-    name2: 'Castilho.',
+    name: 'Murilo Castilho',
+    headline1: 'Sistemas sob medida',
+    headline2: 'com IA aplicada.',
     roles: [
-      'sistemas internos sob medida',
-      'IA aplicada (RAG em produção)',
+      'do dado bruto à tela da equipe',
+      'RAG em produção',
       'automação ponta a ponta',
     ],
     rolesLabel: 'Foco atual',

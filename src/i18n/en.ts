@@ -69,9 +69,10 @@ export const en: Dict = {
   banner: 'Curious? This site’s code is on GitHub: {url} · Ask the terminal: type help',
   hero: {
     whoami: 'whoami',
-    name1: 'Murilo',
-    name2: 'Castilho.',
-    roles: ['custom internal systems', 'applied AI (RAG in production)', 'end-to-end automation'],
+    name: 'Murilo Castilho',
+    headline1: 'Custom internal systems',
+    headline2: 'with applied AI.',
+    roles: ['from raw data to the team’s screen', 'RAG in production', 'end-to-end automation'],
     rolesLabel: 'Current focus',
     lede: 'I build internal systems, automation and applied AI for real operations — from raw ERP data to the screen the team uses every day.',
     status: 'Available for projects',
