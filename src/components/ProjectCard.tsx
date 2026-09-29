@@ -11,17 +11,19 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
   return (
     <Reveal delay={(index % 2) * 80} className="h-full">
       <article className="card flex h-full flex-col p-5 transition-colors hover:border-accent/50 sm:p-6">
-        <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs">
+        <div className="mb-4 flex flex-col gap-2 font-mono text-xs">
           <span className="tracking-wider text-accent uppercase">
             {String(index + 1).padStart(2, '0')} · {project.stack.join(' · ')}
           </span>
-          {project.production && (
-            <span className="inline-flex items-center gap-1.5 rounded-sm border border-ok/40 bg-ok/10 px-2 py-0.5 text-ok">
-              <span className="size-1.5 rounded-full bg-ok" aria-hidden="true" />
-              {t.projects.production}
-            </span>
-          )}
-          <span className="ml-auto text-muted">#{copy.domain}</span>
+          <div className="flex min-h-6 items-center gap-3">
+            {project.production && (
+              <span className="inline-flex items-center gap-1.5 rounded-sm border border-ok/40 bg-ok/10 px-2 py-0.5 text-ok">
+                <span className="size-1.5 rounded-full bg-ok" aria-hidden="true" />
+                {t.projects.production}
+              </span>
+            )}
+            <span className="ml-auto text-muted">#{copy.domain}</span>
+          </div>
         </div>
 
         <h3 className="mb-3 text-2xl leading-tight font-semibold tracking-tight">{copy.title}</h3>

@@ -11,7 +11,7 @@ export function Process() {
 
       <div className="relative">
         <span
-          className="absolute top-[19px] right-[12%] left-[12%] hidden h-px bg-line md:block"
+          className="absolute top-[19px] right-[calc(25%-1.125rem-20px)] left-5 hidden h-px bg-line md:block"
           aria-hidden="true"
         />
         <span
