@@ -3,7 +3,7 @@ import type { Lang } from '../i18n/context'
 import { extraCommands, type DynamicId, type Effect } from './extras'
 import type { Theme } from './theme'
 // Mesmos limites que o backend valida; importar evita os dois lados divergirem.
-import { MAX_QUESTION, MIN_QUESTION } from '../../api/_lib/validate.ts'
+import { MAX_QUESTION, MIN_QUESTION } from '../../server/lib/validate.ts'
 
 export type OutputId =
   | 'help'

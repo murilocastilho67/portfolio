@@ -21,8 +21,9 @@ npm run lint      # oxlint
 npm run format    # prettier
 npm run build     # tsc -b + vite build (saída em dist/)
 npm run preview   # serve o build de produção localmente
-npm test          # testes das funções puras de api/_lib (node --test)
-npm run rag:index # regera o índice do assistente (ver "Pergunte ao Murilo")
+npm test          # testes das funções puras de server/lib (node --test)
+npm run rag:index # regera o índice do assistente e o api/ask.js (ver "Pergunte ao Murilo")
+npm run build:api # reempacota server/ → api/ask.js (rode ao mexer em server/)
 ```
 
 ## Estrutura
@@ -34,18 +35,20 @@ src/
   hooks/        useTyping, useInView, useScrollSpy, useFocusTrap, ...
   i18n/         dicionários pt/en, LangProvider e useT
   lib/          utilitários puros (comandos do terminal, cliente da API, clipboard, scroll)
+server/
+  ask.ts        código-fonte da função do assistente (POST /api/ask)
+  lib/          funções puras: retrieve, buildPrompt, parseGeminiSse, rateLimit, ...
+  data/         rag-index.json, o índice vetorial gerado por `npm run rag:index`
 api/
-  ask.ts        Vercel Function do assistente (POST /api/ask)
-  _lib/         funções puras: retrieve, buildPrompt, parseGeminiSse, rateLimit, ...
-  _data/        rag-index.json, o índice vetorial gerado por `npm run rag:index`
+  ask.js        GERADO: server/ empacotado num arquivo só (scripts/build-api.mjs). É o que a Vercel roda.
 rag/            sobre-mim.md, conteúdo escrito à mão que entra no índice
-scripts/        build-rag-index.ts
-tests/          testes das funções de api/_lib
+scripts/        build-rag-index.ts, build-api.mjs
+tests/          testes das funções de server/lib
 ```
 
 ## Deploy (Vercel)
 
-Site estático mais uma Vercel Function (`api/ask.ts`) para o assistente.
+Site estático mais uma Vercel Function (`api/ask.js`) para o assistente. A função é **empacotada e commitada** em JavaScript puro: a Vercel não resolve imports `.ts` entre arquivos (a versão em TypeScript direto em `api/` quebrava com `FUNCTION_INVOCATION_FAILED`).
 
 1. Suba o repositório para o GitHub.
 2. Na Vercel: **Add New → Project**, importe o repositório. O preset **Vite** é detectado sozinho (`npm run build`, saída `dist`).
@@ -57,7 +60,7 @@ Via CLI: `npx vercel --prod`.
 
 O terminal do hero responde perguntas sobre o Murilo (`ask <pergunta>`, `pergunte <pergunta>`, ou qualquer linha terminada em `?` ou com 4+ palavras). A resposta usa **só o conteúdo do site**:
 
-1. `npm run rag:index` quebra o conteúdo de `src/i18n/pt.ts` e de `rag/sobre-mim.md` em trechos e gera embeddings (`gemini-embedding-001`, 768 dimensões) em `api/_data/rag-index.json`.
+1. `npm run rag:index` quebra o conteúdo de `src/i18n/pt.ts` e de `rag/sobre-mim.md` em trechos e gera embeddings (`gemini-embedding-001`, 768 dimensões) em `server/data/rag-index.json` e reempacota o `api/ask.js`.
 2. `POST /api/ask` vetoriza a pergunta, busca os trechos mais parecidos (similaridade de cosseno) e chama o Gemini com streaming (SSE). O frontend mostra o texto chegando e as fontes citadas, cada uma com link para a seção.
 3. Limite best-effort por IP (6/min e 40/dia, em memória). O teto real de custo é a cota gratuita do Gemini.
 
@@ -65,7 +68,7 @@ Configuração:
 
 1. Crie uma chave em https://aistudio.google.com/apikey **em um projeto do Google Cloud sem billing**. Assim ela nunca gera cobrança: quando a cota gratuita acaba, o Gemini só para de responder e o site mostra "assistente offline".
 2. Coloque `GEMINI_API_KEY=...` em `.env.local` (ignorado pelo git).
-3. Rode `npm run rag:index` e **commite** `api/_data/rag-index.json`. Rode de novo sempre que o conteúdo do site (ou `rag/sobre-mim.md`) mudar. Sem embeddings no índice a API responde `index_missing` e o site mostra "assistente offline".
+3. Rode `npm run rag:index` e **commite** `server/data/rag-index.json` e `api/ask.js`. Rode de novo sempre que o conteúdo do site (ou `rag/sobre-mim.md`) mudar. Sem embeddings no índice a API responde `index_missing` e o site mostra "assistente offline".
 4. `npm run dev` já serve `/api/ask` (plugin do Vite, só em desenvolvimento, lendo o `.env.local`).
 5. Na Vercel: Project Settings → Environment Variables → `GEMINI_API_KEY`. Opcionais: `GEMINI_MODEL` (padrão `gemini-3.5-flash-lite`) e `GEMINI_EMBED_MODEL` (padrão `gemini-embedding-001`; se trocar, regere o índice).
 

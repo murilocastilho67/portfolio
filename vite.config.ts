@@ -41,7 +41,7 @@ async function sendWebResponse(response: Response, res: ServerResponse) {
 }
 
 /**
- * Só no `vite dev`: a pasta `api/` é da Vercel e o Vite não a serve. Este plugin encaminha
+ * Só no `vite dev`: a função da Vercel (`api/ask.js`) não roda no Vite. Este plugin encaminha
  * `POST /api/ask` para o mesmo handler, carregado via `ssrLoadModule` (recarrega ao editar).
  */
 function devApi(): Plugin {
@@ -55,7 +55,7 @@ function devApi(): Plugin {
 
       server.middlewares.use('/api/ask', async (req, res, next) => {
         try {
-          const handler = (await server.ssrLoadModule('/api/ask.ts')) as {
+          const handler = (await server.ssrLoadModule('/server/ask.ts')) as {
             POST: (request: Request) => Promise<Response>
           }
           await sendWebResponse(await handler.POST(await toWebRequest(req)), res)

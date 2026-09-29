@@ -22,5 +22,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["api", "scripts", "tests", "src/i18n/pt.ts", "src/i18n/en.ts", "src/data"]
+  "include": ["server", "scripts", "tests", "src/i18n/pt.ts", "src/i18n/en.ts", "src/data"]
 }

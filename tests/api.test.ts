@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { createGeminiSseParser, type GeminiEvent } from '../api/_lib/gemini-sse.ts'
-import { buildPrompt } from '../api/_lib/prompt.ts'
-import { clientIp, createRateLimiter } from '../api/_lib/rate-limit.ts'
-import { retrieve } from '../api/_lib/retrieve.ts'
-import type { RagChunk } from '../api/_lib/types.ts'
-import { validateAsk } from '../api/_lib/validate.ts'
-import { dot, l2Normalize } from '../api/_lib/vector.ts'
+import { createGeminiSseParser, type GeminiEvent } from '../server/lib/gemini-sse.ts'
+import { buildPrompt } from '../server/lib/prompt.ts'
+import { clientIp, createRateLimiter } from '../server/lib/rate-limit.ts'
+import { retrieve } from '../server/lib/retrieve.ts'
+import type { RagChunk } from '../server/lib/types.ts'
+import { validateAsk } from '../server/lib/validate.ts'
+import { dot, l2Normalize } from '../server/lib/vector.ts'
 
 function chunk(id: string, embedding: number[]): RagChunk {
   return {

@@ -1,13 +1,13 @@
 /**
- * Gera `api/_data/rag-index.json`: o conteúdo do site (dicionário pt + `rag/sobre-mim.md`)
+ * Gera `server/data/rag-index.json`: o conteúdo do site (dicionário pt + `rag/sobre-mim.md`)
  * quebrado em trechos e vetorizado com o Gemini.
  *
  *   npm run rag:index               indexa (precisa de GEMINI_API_KEY em .env.local)
  *   npm run rag:index -- --no-embed grava os trechos sem embeddings (índice placeholder)
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { embedDocuments } from '../api/_lib/gemini.ts'
-import type { RagChunk } from '../api/_lib/types.ts'
+import { embedDocuments } from '../server/lib/gemini.ts'
+import type { RagChunk } from '../server/lib/types.ts'
 import { careerItems, educationItems } from '../src/data/career.ts'
 import { EMAIL, GITHUB_PERSONAL_URL, GITHUB_PROJECTS_URL, LINKEDIN_URL } from '../src/data/links.ts'
 import { projects } from '../src/data/projects.ts'
@@ -18,7 +18,7 @@ import { pt, type Dict } from '../src/i18n/pt.ts'
 type Draft = Omit<RagChunk, 'embedding'>
 type SectionKey = keyof Dict['sections']
 
-const OUT_FILE = new URL('../api/_data/rag-index.json', import.meta.url)
+const OUT_FILE = new URL('../server/data/rag-index.json', import.meta.url)
 const ENV_FILE = new URL('../.env.local', import.meta.url)
 const MARKDOWN_FILE = new URL('../rag/sobre-mim.md', import.meta.url)
 const BATCH_SIZE = 50
@@ -227,7 +227,7 @@ async function main() {
   const json = `[\n${chunks.map((chunk) => `  ${JSON.stringify(chunk)}`).join(',\n')}\n]\n`
   writeFileSync(OUT_FILE, json)
   log(
-    `${chunks.length} trechos gravados em api/_data/rag-index.json${noEmbed ? ' (sem embeddings)' : ''}`,
+    `${chunks.length} trechos gravados em server/data/rag-index.json${noEmbed ? ' (sem embeddings)' : ''}`,
   )
 }
 

@@ -1,18 +1,18 @@
-import ragIndex from './_data/rag-index.json' with { type: 'json' }
-import { encodeEvent, jsonError, type AskEvent } from './_lib/events.ts'
-import { embedQuery, GeminiError, streamAnswer } from './_lib/gemini.ts'
-import { createGeminiSseParser } from './_lib/gemini-sse.ts'
-import { buildPrompt } from './_lib/prompt.ts'
-import { clientIp, createRateLimiter } from './_lib/rate-limit.ts'
-import { retrieve } from './_lib/retrieve.ts'
+import ragIndex from './data/rag-index.json' with { type: 'json' }
+import { encodeEvent, jsonError, type AskEvent } from './lib/events.ts'
+import { embedQuery, GeminiError, streamAnswer } from './lib/gemini.ts'
+import { createGeminiSseParser } from './lib/gemini-sse.ts'
+import { buildPrompt } from './lib/prompt.ts'
+import { clientIp, createRateLimiter } from './lib/rate-limit.ts'
+import { retrieve } from './lib/retrieve.ts'
 import {
   chunkLabel,
   type AskSource,
   type Lang,
   type RagChunk,
   type ScoredChunk,
-} from './_lib/types.ts'
-import { validateAsk } from './_lib/validate.ts'
+} from './lib/types.ts'
+import { validateAsk } from './lib/validate.ts'
 
 const DEFAULT_MODEL = 'gemini-3.5-flash-lite'
 const DEFAULT_EMBED_MODEL = 'gemini-embedding-001'
