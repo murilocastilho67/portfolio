@@ -27,6 +27,12 @@ const AREA_PER_PARTICLE = 15000
  * com a página, sem movimento extra).
  */
 const PARALLAX = 0.5
+/** Níveis de opacidade das linhas: cada nível é traçado de uma vez só. */
+const BUCKETS = 8
+/** Teto de resolução do canvas: acima disso o custo cresce e a diferença não aparece em linhas finas. */
+const MAX_DPR = 1.5
+/** Com o fundo "sozinho" (sem cursor nem rolagem), a flutuação lenta é desenhada a 30 fps. */
+const IDLE_FRAME_MS = 33
 
 function spawn(width: number, fromY: number, toY: number): Particle[] {
   const count = Math.round((width * (toY - fromY)) / AREA_PER_PARTICLE)
@@ -77,6 +83,8 @@ export function Backdrop() {
     let frame = 0
     let pendingDraw = 0
     let last = performance.now()
+    let lastDraw = 0
+    let lastActivity = 0
 
     const offset = () => window.scrollY * parallax
 
@@ -95,7 +103,7 @@ export function Backdrop() {
     }
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR)
       // No celular a altura muda quando a barra de endereço some; recriar aí faria os pontos saltarem.
       if (canvas.clientWidth !== width) particles = []
       width = canvas.clientWidth
@@ -106,48 +114,69 @@ export function Backdrop() {
       syncField()
     }
 
+    // Buffers reaproveitados entre quadros: o desenho não aloca nada no caminho quente.
+    const visible: Particle[] = []
+    const linkPaths = Array.from({ length: BUCKETS }, () => [] as number[])
+    const reachPaths = Array.from({ length: BUCKETS }, () => [] as number[])
+
+    /** Traça cada balde (mesma opacidade) com um único stroke, em vez de um por linha. */
+    const strokeBuckets = (paths: number[][], maxAlpha: number, lineWidth: number) => {
+      ctx.lineWidth = lineWidth
+      paths.forEach((coords, bucket) => {
+        if (coords.length === 0) return
+        ctx.strokeStyle = `rgba(${accent}, ${((bucket + 1) / BUCKETS) * maxAlpha * alpha})`
+        ctx.beginPath()
+        for (let k = 0; k < coords.length; k += 4) {
+          ctx.moveTo(coords[k], coords[k + 1])
+          ctx.lineTo(coords[k + 2], coords[k + 3])
+        }
+        ctx.stroke()
+        coords.length = 0
+      })
+    }
+
     const draw = () => {
       ctx.clearRect(0, 0, width, height)
       const top = offset()
       // Só o que está na tela (com folga para as linhas que entram pela borda).
-      const visible = particles.filter((p) => p.y - top > -LINK && p.y - top < height + LINK)
+      visible.length = 0
+      for (const p of particles) {
+        if (p.y - top > -LINK && p.y - top < height + LINK) visible.push(p)
+      }
 
       for (let i = 0; i < visible.length; i++) {
         const a = visible[i]
         for (let j = i + 1; j < visible.length; j++) {
           const b = visible[j]
-          const d = Math.hypot(a.x - b.x, a.y - b.y)
-          if (d < LINK) {
-            ctx.strokeStyle = `rgba(${accent}, ${(1 - d / LINK) * 0.22 * alpha})`
-            ctx.lineWidth = 0.7
-            ctx.beginPath()
-            ctx.moveTo(a.x, a.y - top)
-            ctx.lineTo(b.x, b.y - top)
-            ctx.stroke()
-          }
+          const dx = a.x - b.x
+          const dy = a.y - b.y
+          const d2 = dx * dx + dy * dy
+          if (d2 >= LINK * LINK) continue
+          const bucket = Math.min(BUCKETS - 1, Math.floor((1 - Math.sqrt(d2) / LINK) * BUCKETS))
+          linkPaths[bucket].push(a.x, a.y - top, b.x, b.y - top)
         }
       }
+      strokeBuckets(linkPaths, 0.22, 0.7)
 
       if (pointer.active) {
         for (const p of visible) {
-          const d = Math.hypot(p.x - pointer.x, p.y - top - pointer.y)
-          if (d < REACH) {
-            ctx.strokeStyle = `rgba(${accent}, ${(1 - d / REACH) * 0.6 * alpha})`
-            ctx.lineWidth = 0.9
-            ctx.beginPath()
-            ctx.moveTo(pointer.x, pointer.y)
-            ctx.lineTo(p.x, p.y - top)
-            ctx.stroke()
-          }
+          const dx = p.x - pointer.x
+          const dy = p.y - top - pointer.y
+          const d2 = dx * dx + dy * dy
+          if (d2 >= REACH * REACH) continue
+          const bucket = Math.min(BUCKETS - 1, Math.floor((1 - Math.sqrt(d2) / REACH) * BUCKETS))
+          reachPaths[bucket].push(pointer.x, pointer.y, p.x, p.y - top)
         }
+        strokeBuckets(reachPaths, 0.6, 0.9)
       }
 
       ctx.fillStyle = `rgba(${accent}, ${0.55 * alpha})`
+      ctx.beginPath()
       for (const p of visible) {
-        ctx.beginPath()
+        ctx.moveTo(p.x + p.r, p.y - top)
         ctx.arc(p.x, p.y - top, p.r, 0, Math.PI * 2)
-        ctx.fill()
       }
+      ctx.fill()
     }
 
     const step = (now: number) => {
@@ -172,7 +201,12 @@ export function Backdrop() {
         if (p.y < -10) p.y = fieldHeight + 10
         else if (p.y > fieldHeight + 10) p.y = -10
       }
-      draw()
+      // Com cursor ou rolagem recentes desenha todo quadro; só flutuando, um quadro sim, outro não.
+      const idle = now - lastActivity > 400
+      if (!idle || now - lastDraw >= IDLE_FRAME_MS) {
+        draw()
+        lastDraw = now
+      }
       frame = requestAnimationFrame(step)
     }
 
@@ -187,6 +221,7 @@ export function Backdrop() {
     }
     /** Sem o laço de animação (redução de movimento), redesenha uma vez por frame sob demanda. */
     const requestDraw = () => {
+      lastActivity = performance.now()
       if (frame || pendingDraw) return
       pendingDraw = requestAnimationFrame(() => {
         pendingDraw = 0
@@ -241,9 +276,10 @@ export function Backdrop() {
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div className="absolute -top-48 -left-48 size-[46rem] rounded-full bg-(--c-glow-a) blur-[120px]" />
-      <div className="absolute top-1/3 -right-48 size-[38rem] rounded-full bg-(--c-glow-b) blur-[140px]" />
-      <div className="absolute -bottom-56 left-1/4 size-[40rem] rounded-full bg-(--c-glow-c) blur-[140px]" />
+      {/* Luz ambiente em gradiente radial: o mesmo halo do antigo blur(120px), sem o custo do filtro. */}
+      <div className="absolute -top-[26rem] -left-[26rem] size-[62rem] bg-[radial-gradient(closest-side,var(--c-glow-a),transparent)]" />
+      <div className="absolute top-[calc(33%-8rem)] -right-[26rem] size-[56rem] bg-[radial-gradient(closest-side,var(--c-glow-b),transparent)]" />
+      <div className="absolute -bottom-[34rem] left-[calc(25%-8rem)] size-[58rem] bg-[radial-gradient(closest-side,var(--c-glow-c),transparent)]" />
       <canvas ref={canvasRef} className="absolute inset-0 size-full opacity-80" />
     </div>
   )

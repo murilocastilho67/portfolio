@@ -458,16 +458,18 @@ html[data-theme='light'] {
     color: var(--c-accent);
   }
 
-  /* Vidro fosco leve: deixa passar a luz ambiente sem perder o contraste do texto. */
+  /*
+   * Quase opaco, deixando passar só um pouco da luz ambiente. Sem backdrop-filter de propósito:
+   * com o canvas animado por baixo, o navegador refaria o desfoque de cada card a cada quadro.
+   */
   .card {
     border: 1px solid color-mix(in srgb, var(--c-line) 85%, transparent);
     border-radius: var(--radius-lg);
     background: linear-gradient(
       180deg,
-      color-mix(in srgb, var(--c-surface-2) 82%, transparent),
-      color-mix(in srgb, var(--c-surface) 90%, transparent)
+      color-mix(in srgb, var(--c-surface-2) 92%, transparent),
+      color-mix(in srgb, var(--c-surface) 96%, transparent)
     );
-    backdrop-filter: blur(10px);
     box-shadow: inset 0 1px 0 color-mix(in srgb, var(--c-text) 4%, transparent);
     transition:
       border-color 0.5s var(--ease-soft),
@@ -497,19 +499,17 @@ html[data-theme='light'] {
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    /* Só opacidade e transform: animam no compositor, sem repintar (filter: blur repintava a cada quadro). */
     .reveal {
       opacity: 0;
-      transform: translateY(28px);
-      filter: blur(6px);
+      transform: translateY(28px) scale(0.985);
       transition:
         opacity 0.9s var(--ease-soft),
-        transform 1.1s var(--ease-soft),
-        filter 0.9s var(--ease-soft);
+        transform 1.1s var(--ease-soft);
     }
     .reveal[data-visible='true'] {
       opacity: 1;
       transform: none;
-      filter: none;
     }
 
     /* Traçado dos conectores dos diagramas. */
@@ -659,6 +659,10 @@ html.vt-demo-out::view-transition-new(root) {
 .kt {
   --kt-base: 550;
   --kt-peak: 700;
+}
+/* A troca de peso muda a largura das letras: o recálculo de layout fica preso ao título. */
+:is(h1, h2):has(.kt) {
+  contain: layout style;
 }
 .kt-w {
   display: inline-block;

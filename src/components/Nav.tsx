@@ -92,7 +92,7 @@ export function Nav({ onOpenPalette }: { onOpenPalette: () => void }) {
     <>
       <header
         data-scrolled={scrolled}
-        className="nav-shell sticky top-0 z-40 border-b border-transparent data-[scrolled=true]:border-line/60 data-[scrolled=true]:bg-bg/70 data-[scrolled=true]:backdrop-blur-xl"
+        className="nav-shell sticky top-0 z-40 border-b border-transparent data-[scrolled=true]:border-line/60 data-[scrolled=true]:bg-bg/70 data-[scrolled=true]:backdrop-blur-md"
       >
         <div className="wrap flex h-16 items-center justify-between gap-4">
           <a
