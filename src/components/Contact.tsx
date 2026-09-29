@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { EMAIL, GITHUB_PERSONAL_URL, GITHUB_PROJECTS_URL, LINKEDIN_URL } from '../data/links'
+import { useMagnetic } from '../hooks/useMagnetic'
 import { useT } from '../i18n/useT'
 import { copyText } from '../lib/clipboard'
 import { ExternalLink } from './ExternalLink'
@@ -47,6 +48,7 @@ const links = [
 
 export function Contact() {
   const { t } = useT()
+  const copyRef = useMagnetic<HTMLDivElement>()
 
   return (
     <section id="contato" aria-labelledby="contato-title" className="wrap py-16 sm:py-24">
@@ -62,7 +64,7 @@ export function Contact() {
           >
             {EMAIL}
           </a>
-          <div>
+          <div ref={copyRef}>
             <CopyButton />
           </div>
         </div>
@@ -72,13 +74,10 @@ export function Contact() {
             <li key={key}>
               <ExternalLink
                 href={href}
-                className="group flex min-h-16 items-center justify-between gap-4 py-4 text-xl font-semibold tracking-tight transition-colors hover:text-accent sm:text-2xl"
+                className="row-link group flex min-h-16 items-center justify-between gap-4 py-4 text-xl font-semibold tracking-tight sm:text-2xl"
               >
-                {t.contact.links[key]}
-                <Icon
-                  name="arrow"
-                  className="size-6 shrink-0 text-accent transition-transform group-hover:translate-x-1.5 motion-reduce:transition-none"
-                />
+                <span className="row-link-label">{t.contact.links[key]}</span>
+                <Icon name="arrow" className="row-link-arrow size-6 shrink-0 text-accent" />
               </ExternalLink>
             </li>
           ))}

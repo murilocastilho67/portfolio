@@ -27,6 +27,7 @@ export function MobileMenu({ id, open, active, onClose }: MobileMenuProps) {
       role="dialog"
       aria-modal="true"
       aria-label={t.nav.menuLabel}
+      data-lenis-prevent
       className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-bg md:hidden"
     >
       <div className="wrap flex h-16 shrink-0 items-center justify-between">

@@ -155,6 +155,7 @@ function Dialog({ onClose, onNotify }: Omit<CommandPaletteProps, 'open'>) {
           id={listId}
           role="listbox"
           aria-label={t.palette.title}
+          data-lenis-prevent
           className="max-h-[min(20rem,50vh)] overflow-y-auto p-2"
         >
           {results.map((command, i) => (

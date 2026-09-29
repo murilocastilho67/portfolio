@@ -96,6 +96,7 @@ export function Terminal() {
         aria-label={t.terminal.bodyLabel}
         // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
         tabIndex={0}
+        data-lenis-prevent
         className="h-[21rem] overflow-y-auto p-4 font-mono text-[13px] leading-relaxed"
       >
         {!cleared && (

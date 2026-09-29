@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { setSmoothScrollPaused } from '../lib/scroll'
 
 /** Trava o scroll do body enquanto `active`, compensando a largura da barra de rolagem. */
 export function useScrollLock(active: boolean) {
@@ -11,8 +12,10 @@ export function useScrollLock(active: boolean) {
 
     style.overflow = 'hidden'
     if (scrollbar > 0) style.paddingRight = `${scrollbar}px`
+    setSmoothScrollPaused(true)
 
     return () => {
+      setSmoothScrollPaused(false)
       style.overflow = previous.overflow
       style.paddingRight = previous.paddingRight
     }

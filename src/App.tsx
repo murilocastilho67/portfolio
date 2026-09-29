@@ -13,7 +13,9 @@ import { Projects } from './components/Projects'
 import { Stack } from './components/Stack'
 import { Stats } from './components/Stats'
 import { Toast } from './components/Toast'
+import { useReducedMotion } from './hooks/useReducedMotion'
 import { useT } from './i18n/useT'
+import { startSmoothScroll } from './lib/scroll'
 
 function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false
@@ -22,7 +24,11 @@ function isTypingTarget(target: EventTarget | null): boolean {
 
 export default function App() {
   const { t } = useT()
+  const reduced = useReducedMotion()
   const [paletteOpen, setPaletteOpen] = useState(false)
+
+  // Rolagem com inércia só para quem não pediu redução de movimento.
+  useEffect(() => (reduced ? undefined : startSmoothScroll()), [reduced])
   const [toast, setToast] = useState<string | null>(null)
 
   const openPalette = useCallback(() => setPaletteOpen(true), [])

@@ -1,3 +1,4 @@
+import { useMagnetic } from '../hooks/useMagnetic'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { useTyping } from '../hooks/useTyping'
 import { GITHUB_PROJECTS_URL } from '../data/links'
@@ -9,6 +10,7 @@ export function Hero() {
   const { t } = useT()
   const reduced = useReducedMotion()
   const role = useTyping(t.hero.roles, { loop: true, animate: !reduced })
+  const ctaRef = useMagnetic<HTMLDivElement>()
 
   return (
     <section id="inicio" className="wrap pt-12 pb-16 sm:pt-16 lg:pt-24">
@@ -47,12 +49,18 @@ export function Hero() {
             {t.hero.status}
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div ref={ctaRef} className="mt-8 flex flex-wrap gap-3">
             <a href="#projetos" className="btn btn-primary">
               {t.hero.ctaProjects}
+              <span className="btn-arrow" aria-hidden="true">
+                →
+              </span>
             </a>
             <ExternalLink href={GITHUB_PROJECTS_URL} className="btn btn-secondary">
               {t.hero.ctaGithub}
+              <span className="btn-arrow btn-arrow-up" aria-hidden="true">
+                ↗
+              </span>
             </ExternalLink>
             <a href="#contato" className="btn btn-ghost">
               {t.hero.ctaContact}
