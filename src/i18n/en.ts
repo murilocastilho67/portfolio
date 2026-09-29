@@ -46,6 +46,7 @@ export const en: Dict = {
       copyEmail: 'Copy email',
       github: 'Open GitHub',
       linkedin: 'Open LinkedIn',
+      whatsapp: 'Open WhatsApp',
       switchLang: 'Mudar para Português',
       themeToLight: 'Switch to light theme',
       themeToDark: 'Switch to dark theme',
@@ -440,7 +441,10 @@ export const en: Dict = {
     copied: 'Copied',
     copyAria: 'Copy email to clipboard',
     copiedStatus: 'Email copied',
+    whatsapp: 'Message on WhatsApp',
+    whatsappMessage: "Hi Murilo! I saw your portfolio and I'd like to talk about a project.",
     links: {
+      whatsapp: 'WhatsApp',
       linkedin: 'LinkedIn',
       githubProjects: 'GitHub · projects',
       githubPersonal: 'GitHub · personal',

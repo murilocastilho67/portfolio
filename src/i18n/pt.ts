@@ -44,6 +44,7 @@ export const pt = {
       copyEmail: 'Copiar e-mail',
       github: 'Abrir GitHub',
       linkedin: 'Abrir LinkedIn',
+      whatsapp: 'Abrir WhatsApp',
       switchLang: 'Mudar para English',
       themeToLight: 'Ativar tema claro',
       themeToDark: 'Ativar tema escuro',
@@ -434,7 +435,10 @@ export const pt = {
     copied: 'Copiado',
     copyAria: 'Copiar e-mail para a área de transferência',
     copiedStatus: 'E-mail copiado',
+    whatsapp: 'Chamar no WhatsApp',
+    whatsappMessage: 'Olá, Murilo! Vi seu portfólio e quero conversar sobre um projeto.',
     links: {
+      whatsapp: 'WhatsApp',
       linkedin: 'LinkedIn',
       githubProjects: 'GitHub · projetos',
       githubPersonal: 'GitHub · pessoal',

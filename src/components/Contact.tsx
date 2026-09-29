@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react'
-import { EMAIL, GITHUB_PERSONAL_URL, GITHUB_PROJECTS_URL, LINKEDIN_URL } from '../data/links'
+import {
+  EMAIL,
+  GITHUB_PERSONAL_URL,
+  GITHUB_PROJECTS_URL,
+  LINKEDIN_URL,
+  whatsappUrl,
+} from '../data/links'
 import { useMagnetic } from '../hooks/useMagnetic'
 import { useT } from '../i18n/useT'
 import { track } from '../lib/analytics'
@@ -44,15 +50,16 @@ function CopyButton() {
   )
 }
 
-const links = [
-  { key: 'linkedin', href: LINKEDIN_URL, event: 'open_linkedin' },
-  { key: 'githubProjects', href: GITHUB_PROJECTS_URL, event: 'open_github' },
-  { key: 'githubPersonal', href: GITHUB_PERSONAL_URL, event: 'open_github' },
-] as const
-
 export function Contact() {
   const { t } = useT()
   const copyRef = useMagnetic<HTMLDivElement>()
+  const whatsapp = whatsappUrl(t.contact.whatsappMessage)
+  const links = [
+    { key: 'whatsapp', href: whatsapp, event: 'open_whatsapp' },
+    { key: 'linkedin', href: LINKEDIN_URL, event: 'open_linkedin' },
+    { key: 'githubProjects', href: GITHUB_PROJECTS_URL, event: 'open_github' },
+    { key: 'githubPersonal', href: GITHUB_PERSONAL_URL, event: 'open_github' },
+  ] as const
 
   return (
     <section id="contato" aria-labelledby="contato-title" className="wrap py-16 sm:py-24">
@@ -68,8 +75,16 @@ export function Contact() {
           >
             {EMAIL}
           </a>
-          <div ref={copyRef}>
+          <div ref={copyRef} className="flex flex-wrap gap-3">
             <CopyButton />
+            <ExternalLink
+              href={whatsapp}
+              onClick={() => track('open_whatsapp')}
+              className="btn btn-primary"
+            >
+              <Icon name="whatsapp" className="size-4" />
+              {t.contact.whatsapp}
+            </ExternalLink>
           </div>
         </div>
 

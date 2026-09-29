@@ -21,6 +21,7 @@ export type IconName =
   | 'github'
   | 'sun'
   | 'moon'
+  | 'whatsapp'
 
 const paths: Record<IconName, ReactNode> = {
   sun: (
@@ -30,6 +31,12 @@ const paths: Record<IconName, ReactNode> = {
     </>
   ),
   moon: <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />,
+  whatsapp: (
+    <>
+      <path d="M3.5 20.5 4.9 16A8.5 8.5 0 1 1 8 19.1z" />
+      <path d="M9 8.3c0 3.6 3.1 6.7 6.7 6.7l1.1-1.6-2.1-1.1-1 .9a5 5 0 0 1-2.9-2.9l.9-1-1.1-2.1z" />
+    </>
+  ),
   database: (
     <>
       <ellipse cx="12" cy="5.5" rx="7.5" ry="3" />

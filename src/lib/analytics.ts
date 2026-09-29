@@ -11,6 +11,7 @@ interface EventData {
   copy_email: undefined
   open_linkedin: undefined
   open_github: undefined
+  open_whatsapp: undefined
   open_palette: undefined
   switch_lang: undefined
   switch_theme: undefined

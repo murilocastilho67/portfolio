@@ -24,7 +24,7 @@ Murilo entende a regra com quem opera o negócio, modela o dado direto na fonte 
 
 ## Disponibilidade e contato
 <!-- section: contato -->
-Murilo está disponível para vagas, freelas e projetos sob medida, e para trocar ideia sobre dado e IA aplicada. Contato: e-mail murilocastilho67@gmail.com, LinkedIn linkedin.com/in/murilocastilho67, GitHub github.com/murilocastilh0 (projetos) e github.com/murilocastilho67 (pessoal). Ele responde rápido.
+Murilo está disponível para vagas, freelas e projetos sob medida, e para trocar ideia sobre dado e IA aplicada. Contato: e-mail murilocastilho67@gmail.com, WhatsApp +55 49 99937-5167 (botão "Chamar no WhatsApp" na seção de contato), LinkedIn linkedin.com/in/murilocastilho67, GitHub github.com/murilocastilh0 (projetos) e github.com/murilocastilho67 (pessoal). Ele responde rápido.
 
 ## Este site
 <!-- section: sobre -->

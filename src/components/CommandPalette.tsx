@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react'
-import { EMAIL, GITHUB_PROJECTS_URL, LINKEDIN_URL } from '../data/links'
+import { EMAIL, GITHUB_PROJECTS_URL, LINKEDIN_URL, whatsappUrl } from '../data/links'
 import { sectionIds } from '../data/sections'
 import { useFocusTrap } from '../hooks/useFocusTrap'
 import { useScrollLock } from '../hooks/useScrollLock'
@@ -79,6 +79,15 @@ function Dialog({ onClose, onNotify }: Omit<CommandPaletteProps, 'open'>) {
         run: () => {
           track('open_linkedin')
           openExternal(LINKEDIN_URL)
+        },
+      },
+      {
+        id: 'whatsapp',
+        kind: 'action',
+        label: t.palette.actions.whatsapp,
+        run: () => {
+          track('open_whatsapp')
+          openExternal(whatsappUrl(t.contact.whatsappMessage))
         },
       },
       { id: 'lang', kind: 'action', label: t.palette.actions.switchLang, run: toggleLang },
