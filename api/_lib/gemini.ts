@@ -84,7 +84,13 @@ export function streamAnswer(
     {
       systemInstruction: { parts: [{ text: systemInstruction }] },
       contents: [{ role: 'user', parts: [{ text: userText }] }],
-      generationConfig: { temperature: 0.3, maxOutputTokens: 350 },
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 350,
+        // Os modelos Gemini 3 "pensam" antes de responder por padrão: ~28 s até o 1º token.
+        // A resposta é só reescrever o contexto recuperado, então o mínimo basta (~0,8 s).
+        thinkingConfig: { thinkingLevel: 'minimal' },
+      },
     },
     signal,
   )
