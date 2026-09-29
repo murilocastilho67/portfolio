@@ -19,7 +19,7 @@ export function About() {
           <li key={card.title}>
             <Reveal
               delay={i * 70}
-              className="card h-full p-6 transition-colors hover:border-accent/50"
+              className="card card-lift h-full p-6"
             >
               <span className="mb-5 inline-flex size-11 items-center justify-center rounded-md bg-accent-soft text-accent">
                 <Icon name={icons[i] ?? 'code'} className="size-6" />

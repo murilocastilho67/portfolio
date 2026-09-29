@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { About } from './components/About'
+import { Backdrop } from './components/Backdrop'
 import { Career } from './components/Career'
 import { CommandPalette } from './components/CommandPalette'
 import { Contact } from './components/Contact'
@@ -50,6 +51,7 @@ export default function App() {
 
   return (
     <>
+      <Backdrop />
       <a
         href="#conteudo"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[80] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2.5 focus:font-mono focus:text-sm focus:font-semibold focus:text-bg"

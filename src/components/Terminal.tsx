@@ -79,7 +79,7 @@ export function Terminal() {
   }
 
   return (
-    <div className="card overflow-hidden shadow-[0_24px_60px_-30px_rgb(0_0_0/0.8)]">
+    <div className="card overflow-hidden shadow-[0_30px_80px_-30px_rgb(0_0_0/0.9),0_0_60px_-20px_rgb(242_169_59/0.25)]">
       <div className="flex h-10 items-center gap-2 border-b border-line bg-surface-2 px-4">
         <span className="flex gap-1.5" aria-hidden="true">
           <span className="size-2.5 rounded-full bg-[#ff5f57]" />
