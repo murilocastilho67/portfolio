@@ -88,10 +88,11 @@ O site usa o Vercel Web Analytics (`@vercel/analytics`), sem cookies e sem dado 
 - **Abertura (boot):** toca só na primeira visita (`localStorage` `booted`). `?boot` na URL força; o comando `reboot` no terminal repete. Não toca com redução de movimento.
 - **Easter eggs:** cada um é isolado e fácil de apagar. Comandos do terminal em `src/lib/extras.ts` (mais os textos em `terminal.out`/`terminal.extras` do i18n); Konami e chuva âmbar em `src/hooks/useKonami.ts` e `src/components/MatrixRain.tsx`; recado do console em `src/hooks/useConsoleBanner.ts`.
 
-## Pendências antes de publicar
+## Endereço oficial e imagem de compartilhamento
 
-- Descomentar e preencher o `<link rel="canonical">` em `index.html` com o domínio final.
-- Adicionar `public/og.png` (1200x630) e as tags `og:image` / `twitter:image` (e trocar `twitter:card` para `summary_large_image`). A imagem não está no repositório, então as tags foram omitidas para não apontar para um arquivo inexistente.
+- O site está em `https://murilocastilho.vercel.app/`, declarado no `<link rel="canonical">`, no `og:url`, nas imagens (`og:image`/`twitter:image`) e no JSON-LD do `index.html`. Trocando de domínio, atualize esses pontos e o endereço escrito em `scripts/og.html`.
+- `public/og.png` (1200x630) é o cartão que aparece ao colar o link no LinkedIn, WhatsApp e X. É gerado a partir de `scripts/og.html` (mesmas fontes e cores do site) com um print do Chrome/Edge headless; o comando está no comentário do topo do arquivo.
+- O LinkedIn guarda o cartão em cache: depois de mudar a imagem, force a atualização em https://www.linkedin.com/post-inspector/.
 
 ## Acessibilidade
 

@@ -1,0 +1,225 @@
+<!doctype html>
+<!--
+  Modelo da imagem de compartilhamento (public/og.png, 1200x630).
+  Regerar (Chrome ou Edge em modo headless, a partir da raiz do projeto):
+    msedge --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630
+           --screenshot=public/og.png file:///C:/portfolio/scripts/og.html
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      @font-face {
+        font-family: 'SG';
+        src: url('../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2')
+          format('woff2-variations');
+        font-weight: 300 700;
+      }
+      @font-face {
+        font-family: 'JB';
+        src: url('../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2')
+          format('woff2-variations');
+        font-weight: 100 800;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: #0b0d10;
+        color: #ece9e1;
+        font-family: 'SG', sans-serif;
+      }
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        padding: 64px 72px;
+        overflow: hidden;
+        background:
+          radial-gradient(closest-side, rgb(242 169 59 / 0.2), transparent) -320px -360px / 1000px 1000px no-repeat,
+          radial-gradient(closest-side, rgb(242 112 59 / 0.12), transparent) 760px 180px / 900px 900px no-repeat,
+          #0b0d10;
+      }
+      /* Grade sutil, igual ao fundo do site, esmaecendo para baixo. */
+      .card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgb(236 233 225 / 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgb(236 233 225 / 0.045) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: radial-gradient(ellipse 90% 80% at 30% 20%, #000 30%, transparent 80%);
+      }
+      .net {
+        position: absolute;
+        right: -90px;
+        top: 70px;
+        width: 480px;
+        height: 480px;
+        opacity: 0.85;
+      }
+      .content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: 'JB', monospace;
+        font-size: 22px;
+        font-weight: 700;
+      }
+      .mark {
+        display: grid;
+        place-items: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        background: #14171c;
+        border: 1px solid #262b33;
+        color: #f2a93b;
+        font-size: 20px;
+      }
+      .top .dot {
+        color: #f2a93b;
+      }
+      .chip {
+        align-self: flex-start;
+        margin-top: 58px;
+        padding: 8px 14px;
+        border: 1px solid #262b33;
+        border-radius: 8px;
+        background: #14171c;
+        font-family: 'JB', monospace;
+        font-size: 19px;
+      }
+      .chip .user {
+        color: #6fcf97;
+      }
+      .chip .muted {
+        color: #8a919c;
+      }
+      .chip .cursor {
+        color: #f2a93b;
+      }
+      .name {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 26px;
+        font-size: 34px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        color: rgb(236 233 225 / 0.92);
+      }
+      .name::before {
+        content: '';
+        width: 40px;
+        height: 2px;
+        background: #f2a93b;
+      }
+      h1 {
+        margin-top: 14px;
+        font-size: 80px;
+        line-height: 1;
+        font-weight: 700;
+        letter-spacing: -0.045em;
+      }
+      h1 span {
+        display: block;
+      }
+      h1 .accent {
+        color: #f2a93b;
+      }
+      .bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+        font-family: 'JB', monospace;
+        font-size: 19px;
+        color: #8a919c;
+      }
+      .tags {
+        display: flex;
+        gap: 10px;
+      }
+      .tags span {
+        padding: 6px 12px;
+        border: 1px solid #262b33;
+        border-radius: 6px;
+        background: #1a1e25;
+        color: #ece9e1;
+      }
+      .tags .live {
+        border-color: rgb(111 207 151 / 0.45);
+        background: rgb(111 207 151 / 0.1);
+        color: #6fcf97;
+      }
+      .url {
+        color: #f2a93b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <!-- Rede de pontos âmbar, como o fundo do site. -->
+      <svg class="net" viewBox="0 0 560 560" aria-hidden="true">
+        <g fill="none" stroke="#f2a93b" stroke-linecap="round">
+          <path stroke-opacity=".28" stroke-width="1.2" d="M120 90 250 60 380 130 470 70M250 60 300 200 380 130M300 200 200 260 120 90M300 200 430 280 380 130M430 280 520 210 470 70M200 260 260 380 430 280M260 380 150 450 200 260M260 380 400 460 430 280M400 460 520 400 430 280M150 450 300 520 400 460" />
+          <path stroke-opacity=".6" stroke-width="1.6" d="M300 200 360 330M360 330 430 280M360 330 260 380M360 330 400 460" />
+        </g>
+        <g fill="#f2a93b">
+          <circle cx="120" cy="90" r="4" fill-opacity=".6" />
+          <circle cx="250" cy="60" r="3.5" fill-opacity=".6" />
+          <circle cx="380" cy="130" r="4.5" fill-opacity=".7" />
+          <circle cx="470" cy="70" r="3" fill-opacity=".5" />
+          <circle cx="300" cy="200" r="5" fill-opacity=".8" />
+          <circle cx="200" cy="260" r="3.5" fill-opacity=".6" />
+          <circle cx="430" cy="280" r="5" fill-opacity=".8" />
+          <circle cx="520" cy="210" r="3" fill-opacity=".5" />
+          <circle cx="260" cy="380" r="4" fill-opacity=".7" />
+          <circle cx="150" cy="450" r="3" fill-opacity=".5" />
+          <circle cx="400" cy="460" r="4.5" fill-opacity=".7" />
+          <circle cx="520" cy="400" r="3" fill-opacity=".5" />
+          <circle cx="300" cy="520" r="3" fill-opacity=".45" />
+          <circle cx="360" cy="330" r="7" />
+          <circle cx="360" cy="330" r="16" fill-opacity=".14" />
+        </g>
+      </svg>
+
+      <div class="content">
+        <div class="top">
+          <span class="mark">&gt;_</span>
+          <span>murilo<span class="dot">.</span>dev</span>
+        </div>
+        <div class="chip">
+          <span class="user">murilo@castilho</span><span class="muted">:~$</span> whoami<span class="cursor">▌</span>
+        </div>
+        <div class="name">Murilo Castilho</div>
+        <h1>
+          <span>Sistemas sob medida</span>
+          <span class="accent">com IA aplicada.</span>
+        </h1>
+        <div class="bottom">
+          <div class="tags">
+            <span>React</span>
+            <span>FastAPI</span>
+            <span>Python</span>
+            <span class="live">● RAG em produção</span>
+          </div>
+          <span class="url">murilocastilho.vercel.app</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
