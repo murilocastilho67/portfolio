@@ -1,4 +1,5 @@
 import { track as vercelTrack } from '@vercel/analytics'
+import type { ProjectId } from '../data/projects'
 
 /**
  * Eventos customizados e seus dados. Nunca enviar texto digitado pelo usuário (a pergunta do
@@ -15,6 +16,7 @@ interface EventData {
   switch_theme: undefined
   konami: undefined
   boot_skipped: undefined
+  open_demo: { project: ProjectId }
 }
 
 export type AnalyticsEvent = keyof EventData

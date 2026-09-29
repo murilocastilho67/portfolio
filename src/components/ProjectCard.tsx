@@ -1,5 +1,6 @@
 import type { Project } from '../data/projects'
 import { useT } from '../i18n/useT'
+import { DemoButton } from './DemoButton'
 import { Diagram } from './Diagram'
 import { Reveal } from './Reveal'
 
@@ -36,6 +37,8 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             </li>
           ))}
         </ul>
+
+        <DemoButton project={project.id} title={copy.title} />
 
         <div className="mt-auto rounded-md border border-line bg-bg/60 p-2 sm:p-3">
           <Diagram steps={copy.steps} label={diagramLabel} />

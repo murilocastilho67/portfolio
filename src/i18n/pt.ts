@@ -242,6 +242,7 @@ export const pt = {
     lede: 'Mais de uma dezena de sistemas internos construídos do zero num grupo de transporte — do dado bruto até a tela que a equipe usa. Sem prints: dado de empresa não sai daqui, então cada projeto vem com o esquema de como funciona.',
     production: 'em produção',
     diagramPrefix: 'Diagrama do fluxo',
+    demoOpen: 'Ver por dentro',
     alsoTitle: '+ também construí',
     items: {
       platform: {

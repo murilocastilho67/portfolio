@@ -1,0 +1,154 @@
+.pg-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.pg-sub {
+  display: block;
+  color: var(--d-muted);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+.pg-sub--sm {
+  display: none;
+}
+@media (max-width: 639px) {
+  .pg-sub--sm {
+    display: block;
+  }
+}
+.pg-bar {
+  position: sticky;
+  bottom: -16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px 10px;
+  margin: 12px -16px -16px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--d-line);
+  background: var(--d-surface);
+}
+.pg-bar > span {
+  margin-right: auto;
+}
+.pg-bar[data-active] {
+  background: var(--d-accent-soft);
+}
+@media (max-width: 639px) {
+  .pg-bar {
+    bottom: -12px;
+    margin: 12px -12px -12px;
+    padding-inline: 12px;
+  }
+}
+
+/* Folha "Dados para depósito" */
+.pg-paper {
+  padding: 22px 24px;
+  border: 1px solid var(--d-line-strong);
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 6px 20px -10px rgb(15 23 42 / 0.35);
+}
+.pg-paper-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--d-text);
+}
+.pg-paper-head h4 {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+.pg-paper-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.pg-paper-table th {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--d-line-strong);
+  color: var(--d-muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+}
+.pg-paper-table td {
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--d-line);
+  vertical-align: top;
+}
+.pg-paper-table tfoot td {
+  border-top: 2px solid var(--d-text);
+  border-bottom: 0;
+  font-weight: 800;
+}
+@media (max-width: 639px) {
+  .pg-paper {
+    padding: 14px 12px;
+  }
+  .pg-col-bank {
+    display: none;
+  }
+}
+.pg-progress {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+.pg-progress .dm-btn {
+  align-self: flex-end;
+}
+
+/* Contas bancárias */
+.pg-suppliers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+}
+.pg-supplier {
+  padding: 10px 14px 12px;
+}
+.pg-supplier > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.pg-supplier li li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-top: 1px solid var(--d-line);
+}
+.pg-supplier li li .dm-mono {
+  margin-right: auto;
+}
+.pg-star {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: #6b7280;
+}
+.pg-star:hover {
+  background: var(--d-sunken);
+}
+.pg-star[aria-pressed='true'] {
+  color: #b45309;
+}

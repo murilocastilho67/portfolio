@@ -243,6 +243,7 @@ export const en: Dict = {
     lede: 'A dozen-plus internal systems built from scratch at a transport group — from raw data to the screen the team uses. No screenshots: company data does not leave the building, so each project comes with a schematic of how it works.',
     production: 'in production',
     diagramPrefix: 'Flow diagram',
+    demoOpen: 'Look inside',
     alsoTitle: '+ also built',
     items: {
       platform: {
