@@ -92,7 +92,7 @@ export function RouteMap({ routeId, stops, hover, pinned, onHover, onPin }: Rout
             ))}
         </g>
         <path d={d} pathLength={1} className="rt-casing" />
-        <path id={pathId} d={d} pathLength={1} className="rt-line" key={d} />
+        <path id={pathId} d={d} pathLength={1} className="rt-line" key={`line-${d}`} />
         {stops.map((stop, i) => {
           const { x, y } = nodes[stop.code]
           const end = i === 0 || i === stops.length - 1
@@ -135,7 +135,7 @@ export function RouteMap({ routeId, stops, hover, pinned, onHover, onPin }: Rout
           )
         })}
         {!reduced && (
-          <g className="rt-truck" aria-hidden="true" key={d}>
+          <g className="rt-truck" aria-hidden="true" key={`truck-${d}`}>
             <rect x="-9" y="-5" width="11" height="8" rx="1.5" />
             <rect x="3" y="-3" width="6" height="6" rx="1.5" className="rt-truck-cab" />
             <circle cx="-4" cy="4" r="2" />
