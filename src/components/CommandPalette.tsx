@@ -3,9 +3,12 @@ import { EMAIL, GITHUB_PROJECTS_URL, LINKEDIN_URL } from '../data/links'
 import { sectionIds } from '../data/sections'
 import { useFocusTrap } from '../hooks/useFocusTrap'
 import { useScrollLock } from '../hooks/useScrollLock'
+import { useTheme } from '../hooks/useTheme'
 import { useT } from '../i18n/useT'
+import { track } from '../lib/analytics'
 import { copyText } from '../lib/clipboard'
 import { scrollToSection } from '../lib/scroll'
+import { setTheme } from '../lib/theme'
 import { Icon } from './Icon'
 
 interface Command {
@@ -30,6 +33,7 @@ function openExternal(url: string) {
 
 function Dialog({ onClose, onNotify }: Omit<CommandPaletteProps, 'open'>) {
   const { t, toggleLang } = useT()
+  const theme = useTheme()
   const panelRef = useRef<HTMLDivElement>(null)
   const listId = useId()
   const [query, setQuery] = useState('')
@@ -52,24 +56,40 @@ function Dialog({ onClose, onNotify }: Omit<CommandPaletteProps, 'open'>) {
         kind: 'action',
         label: t.palette.actions.copyEmail,
         run: () => {
-          void copyText(EMAIL).then((ok) => ok && onNotify(t.toast.emailCopied))
+          void copyText(EMAIL).then((ok) => {
+            if (!ok) return
+            onNotify(t.toast.emailCopied)
+            track('copy_email')
+          })
         },
       },
       {
         id: 'github',
         kind: 'action',
         label: t.palette.actions.github,
-        run: () => openExternal(GITHUB_PROJECTS_URL),
+        run: () => {
+          track('open_github')
+          openExternal(GITHUB_PROJECTS_URL)
+        },
       },
       {
         id: 'linkedin',
         kind: 'action',
         label: t.palette.actions.linkedin,
-        run: () => openExternal(LINKEDIN_URL),
+        run: () => {
+          track('open_linkedin')
+          openExternal(LINKEDIN_URL)
+        },
       },
       { id: 'lang', kind: 'action', label: t.palette.actions.switchLang, run: toggleLang },
+      {
+        id: 'theme',
+        kind: 'action',
+        label: theme === 'dark' ? t.palette.actions.themeToLight : t.palette.actions.themeToDark,
+        run: () => setTheme(theme === 'dark' ? 'light' : 'dark'),
+      },
     ],
-    [t, onNotify, toggleLang],
+    [t, theme, onNotify, toggleLang],
   )
 
   const results = useMemo(() => {
@@ -115,7 +135,7 @@ function Dialog({ onClose, onNotify }: Omit<CommandPaletteProps, 'open'>) {
         role="dialog"
         aria-modal="true"
         aria-label={t.palette.title}
-        className="card w-full max-w-xl overflow-hidden bg-surface shadow-[0_30px_80px_-20px_rgb(0_0_0/0.9)]"
+        className="card w-full max-w-xl overflow-hidden bg-surface shadow-[0_30px_80px_-20px_var(--c-shadow)]"
       >
         <div className="flex items-center gap-3 border-b border-line px-4">
           <Icon name="search" className="size-5 shrink-0 text-accent" />

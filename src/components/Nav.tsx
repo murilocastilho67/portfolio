@@ -6,6 +6,7 @@ import { paletteShortcut } from '../lib/platform'
 import { Icon } from './Icon'
 import { LangToggle } from './LangToggle'
 import { MobileMenu } from './MobileMenu'
+import { ThemeToggle } from './ThemeToggle'
 
 const isNavSection = (id: string | null): id is NavSectionId =>
   navSectionIds.some((navId) => navId === id)
@@ -156,6 +157,7 @@ export function Nav({ onOpenPalette }: { onOpenPalette: () => void }) {
               <Icon name="search" className="size-4" />
               <kbd className="font-mono">{paletteShortcut}</kbd>
             </button>
+            <ThemeToggle />
             <LangToggle />
             <button
               type="button"

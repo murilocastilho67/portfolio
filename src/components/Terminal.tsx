@@ -3,8 +3,12 @@ import { useReducedMotion } from '../hooks/useReducedMotion'
 import { useTyping } from '../hooks/useTyping'
 import { useT } from '../i18n/useT'
 import { ask, AskError, type AskErrorCode, type AskSource } from '../lib/ask'
+import { emitAppEvent } from '../lib/appEvents'
+import { track } from '../lib/analytics'
 import { parseCommand, type OutputId } from '../lib/commands'
+import { outputLines, type DynamicId, type TermLine } from '../lib/extras'
 import { scrollToSection } from '../lib/scroll'
+import { setTheme } from '../lib/theme'
 
 interface AskState {
   status: 'searching' | 'streaming' | 'done' | 'error'
@@ -15,7 +19,7 @@ interface AskState {
 }
 
 type HistoryEntry =
-  | { id: number; kind: 'output'; command: string; output: OutputId }
+  | { id: number; kind: 'output'; command: string; output: OutputId | DynamicId }
   | { id: number; kind: 'ask'; command: string; ask: AskState }
 
 function lineTone(line: string): string {
@@ -25,12 +29,19 @@ function lineTone(line: string): string {
   return 'text-text/90'
 }
 
-function OutputLines({ lines }: { lines: readonly string[] }) {
-  return lines.map((line, i) => (
-    <p key={i} className={`break-words whitespace-pre-wrap ${lineTone(line)}`}>
-      {line}
-    </p>
-  ))
+function OutputLines({ lines }: { lines: readonly TermLine[] }) {
+  return lines.map((line, i) =>
+    typeof line === 'string' ? (
+      <p key={i} className={`break-words whitespace-pre-wrap ${lineTone(line)}`}>
+        {line}
+      </p>
+    ) : (
+      <p key={i} className="break-words whitespace-pre-wrap text-text/90">
+        <span className="text-accent">{line.accent}</span>
+        {line.text}
+      </p>
+    ),
+  )
 }
 
 const Cursor = () => (
@@ -135,7 +146,8 @@ export function Terminal() {
     }
   }, [busy])
 
-  function runAsk(command: string, question: string) {
+  function runAsk(command: string, question: string, source: 'terminal' | 'chip') {
+    track('ask_question', { source })
     const controller = new AbortController()
     abortRef.current = controller
     const id = nextId.current++
@@ -191,10 +203,12 @@ export function Terminal() {
     }
     if (result.type === 'ask') {
       restoreFocus.current = true
-      runAsk(value.trim(), result.question)
+      runAsk(value.trim(), result.question, 'terminal')
       return
     }
     if (result.lang) setLang(result.lang)
+    if (result.theme) setTheme(result.theme)
+    if (result.effect) emitAppEvent(result.effect)
     if (result.section) scrollToSection(result.section)
     setHistory((prev) => [
       ...prev,
@@ -203,7 +217,7 @@ export function Terminal() {
   }
 
   return (
-    <div className="card overflow-hidden shadow-[0_30px_80px_-30px_rgb(0_0_0/0.9),0_0_60px_-20px_rgb(242_169_59/0.25)]">
+    <div className="card theme-dark-island overflow-hidden shadow-[0_30px_80px_-30px_rgb(0_0_0/0.9),0_0_60px_-20px_rgb(242_169_59/0.25)]">
       <div className="flex h-10 items-center gap-2 border-b border-line bg-surface-2 px-4">
         <span className="flex gap-1.5" aria-hidden="true">
           <span className="size-2.5 rounded-full bg-[#ff5f57]" />
@@ -246,7 +260,7 @@ export function Terminal() {
               {entry.kind === 'ask' ? (
                 <AskOutput state={entry.ask} />
               ) : (
-                <OutputLines lines={t.terminal.out[entry.output]} />
+                <OutputLines lines={outputLines(t, entry.output)} />
               )}
             </div>
           ))}
@@ -287,7 +301,7 @@ export function Terminal() {
             key={question}
             type="button"
             disabled={!ready || busy}
-            onClick={() => runAsk(`ask "${question}"`, question)}
+            onClick={() => runAsk(`ask "${question}"`, question, 'chip')}
             className="min-h-11 cursor-pointer rounded-md border border-line bg-surface px-3 font-mono text-xs text-muted transition-colors hover:border-accent/50 hover:text-text disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-9"
           >
             {question}

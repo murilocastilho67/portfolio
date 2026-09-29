@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { EMAIL, GITHUB_PERSONAL_URL, GITHUB_PROJECTS_URL, LINKEDIN_URL } from '../data/links'
 import { useMagnetic } from '../hooks/useMagnetic'
 import { useT } from '../i18n/useT'
+import { track } from '../lib/analytics'
 import { copyText } from '../lib/clipboard'
 import { ExternalLink } from './ExternalLink'
 import { Icon } from './Icon'
@@ -19,7 +20,10 @@ function CopyButton() {
   }, [copied])
 
   async function copy() {
-    if (await copyText(EMAIL)) setCopied(true)
+    if (await copyText(EMAIL)) {
+      setCopied(true)
+      track('copy_email')
+    }
   }
 
   return (
@@ -41,9 +45,9 @@ function CopyButton() {
 }
 
 const links = [
-  { key: 'linkedin', href: LINKEDIN_URL },
-  { key: 'githubProjects', href: GITHUB_PROJECTS_URL },
-  { key: 'githubPersonal', href: GITHUB_PERSONAL_URL },
+  { key: 'linkedin', href: LINKEDIN_URL, event: 'open_linkedin' },
+  { key: 'githubProjects', href: GITHUB_PROJECTS_URL, event: 'open_github' },
+  { key: 'githubPersonal', href: GITHUB_PERSONAL_URL, event: 'open_github' },
 ] as const
 
 export function Contact() {
@@ -70,10 +74,11 @@ export function Contact() {
         </div>
 
         <ul className="divide-y divide-line border-y border-line">
-          {links.map(({ key, href }) => (
+          {links.map(({ key, href, event }) => (
             <li key={key}>
               <ExternalLink
                 href={href}
+                onClick={() => track(event)}
                 className="row-link group flex min-h-16 items-center justify-between gap-4 py-4 text-xl font-semibold tracking-tight sm:text-2xl"
               >
                 <span className="row-link-label">{t.contact.links[key]}</span>

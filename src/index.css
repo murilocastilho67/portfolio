@@ -18,16 +18,88 @@
     format('woff2-variations');
 }
 
+/*
+ * Paleta por tema. Os valores vivem em variáveis --c-* que trocam por html[data-theme]; o @theme
+ * inline só aponta os tokens do Tailwind para elas, então bg-surface, text-accent etc. seguem o
+ * tema sem `dark:`. `.theme-dark-island` refaz as variáveis escuras dentro de um trecho (terminal,
+ * abertura) para ele continuar escuro no tema claro. Sem JS/atributo vale o escuro.
+ */
+:root,
+html[data-theme='dark'],
+.theme-dark-island {
+  --c-bg: #0b0d10;
+  --c-surface: #14171c;
+  --c-surface-2: #1a1e25;
+  --c-line: #262b33;
+  --c-text: #ece9e1;
+  --c-muted: #8a919c;
+  /* Âmbar como texto/linha/sublinhado. */
+  --c-accent: #f2a93b;
+  /* Âmbar como preenchimento (botão primário) e o texto que vai sobre ele. */
+  --c-accent-fill: #f2a93b;
+  --c-accent-fill-hover: #f7bd63;
+  --c-on-accent: #0b0d10;
+  --c-ok: #6fcf97;
+  /* Partículas do fundo: cor (r, g, b) e multiplicador de opacidade, lidos pelo canvas. */
+  --c-particle: 242, 169, 59;
+  --c-particle-alpha: 1;
+  --c-glow-a: rgb(242 169 59 / 0.11);
+  --c-glow-b: rgb(242 112 59 / 0.08);
+  --c-glow-c: rgb(242 169 59 / 0.04);
+  --c-shadow: rgb(0 0 0 / 0.9);
+  color-scheme: dark;
+}
+
+html[data-theme='light'] {
+  --c-bg: #f6f3ec;
+  --c-surface: #ffffff;
+  --c-surface-2: #efeae0;
+  --c-line: #e2dacb;
+  --c-text: #1c1a16;
+  --c-muted: #5e5850;
+  --c-accent: #8a5000;
+  --c-accent-fill: #f2a93b;
+  --c-accent-fill-hover: #f7b850;
+  --c-on-accent: #1c1a16;
+  --c-ok: #17703c;
+  --c-particle: 138, 80, 0;
+  --c-particle-alpha: 0.55;
+  --c-glow-a: rgb(242 169 59 / 0.16);
+  --c-glow-b: rgb(242 112 59 / 0.09);
+  --c-glow-c: rgb(242 169 59 / 0.08);
+  --c-shadow: rgb(60 45 20 / 0.28);
+  color-scheme: light;
+}
+
+.theme-dark-island {
+  color: var(--c-text);
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-line: var(--c-line);
+  --color-text: var(--c-text);
+  --color-muted: var(--c-muted);
+  --color-accent: var(--c-accent);
+  --color-accent-fill: var(--c-accent-fill);
+  --color-on-accent: var(--c-on-accent);
+  --color-accent-soft: color-mix(in srgb, var(--c-accent) 13%, transparent);
+  --color-ok: var(--c-ok);
+}
+
 @theme {
-  --color-bg: #0b0d10;
-  --color-surface: #14171c;
-  --color-surface-2: #1a1e25;
-  --color-line: #262b33;
-  --color-text: #ece9e1;
-  --color-muted: #8a919c;
-  --color-accent: #f2a93b;
-  --color-accent-soft: rgb(242 169 59 / 0.13);
-  --color-ok: #6fcf97;
+  /* A planilha do "antes" é clara nos dois temas: parece planilha de verdade. */
+  --color-sheet: #ffffff;
+  --color-sheet-head: #f1f3f4;
+  --color-sheet-line: #d0d4d9;
+  --color-sheet-text: #1f2328;
+  --color-sheet-muted: #5b6470;
+  --color-sheet-warn: #fff1a6;
+  --color-sheet-err: #f9c6c1;
+  --color-sheet-err-text: #a3211a;
+  --color-sheet-title: #d9e6f7;
 
   --font-sans: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
@@ -49,11 +121,11 @@
   }
   @keyframes pulse-ring {
     0% {
-      box-shadow: 0 0 0 0 rgb(111 207 151 / 0.55);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--c-ok) 55%, transparent);
     }
     70%,
     100% {
-      box-shadow: 0 0 0 8px rgb(111 207 151 / 0);
+      box-shadow: 0 0 0 8px color-mix(in srgb, var(--c-ok) 0%, transparent);
     }
   }
   @keyframes marquee {
@@ -65,8 +137,7 @@
 
 @layer base {
   html {
-    background: var(--color-bg);
-    color-scheme: dark;
+    background: var(--c-bg);
     -webkit-text-size-adjust: 100%;
   }
 
@@ -81,7 +152,7 @@
     overflow-x: clip;
     /* Transparente para o fundo fixo (luz ambiente + partículas) aparecer; a cor vem do html. */
     background: transparent;
-    color: var(--color-text);
+    color: var(--c-text);
     font-family: var(--font-sans);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -95,19 +166,23 @@
     z-index: -1;
     pointer-events: none;
     background-image:
-      linear-gradient(rgb(236 233 225 / 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(236 233 225 / 0.035) 1px, transparent 1px);
+      linear-gradient(color-mix(in srgb, var(--c-text) 3.5%, transparent) 1px, transparent 1px),
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--c-text) 3.5%, transparent) 1px,
+        transparent 1px
+      );
     background-size: 56px 56px;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%);
   }
 
   ::selection {
-    background: var(--color-accent);
-    color: var(--color-bg);
+    background: var(--c-accent-fill);
+    color: var(--c-on-accent);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--c-accent);
     outline-offset: 3px;
     border-radius: var(--radius-sm);
   }
@@ -167,7 +242,7 @@
     font-size: 0.8125rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-muted);
+    color: var(--c-muted);
   }
 
   .btn {
@@ -215,13 +290,13 @@
     transform: translate(3px, -3px);
   }
   .btn-primary {
-    background: var(--color-accent);
-    color: var(--color-bg);
-    box-shadow: 0 10px 30px -12px rgb(242 169 59 / 0.55);
+    background: var(--c-accent-fill);
+    color: var(--c-on-accent);
+    box-shadow: 0 10px 30px -12px color-mix(in srgb, var(--c-accent-fill) 55%, transparent);
   }
   .btn-primary:hover {
-    background: #f7bd63;
-    box-shadow: 0 16px 40px -12px rgb(242 169 59 / 0.75);
+    background: var(--c-accent-fill-hover);
+    box-shadow: 0 16px 40px -12px color-mix(in srgb, var(--c-accent-fill) 75%, transparent);
   }
   /* Brilho que atravessa o botão principal ao passar o mouse. */
   .btn-primary::after {
@@ -249,7 +324,7 @@
     z-index: -1;
     background: radial-gradient(
       120px circle at var(--gx, 50%) var(--gy, 50%),
-      rgb(242 169 59 / 0.16),
+      color-mix(in srgb, var(--c-accent) 16%, transparent),
       transparent 70%
     );
     opacity: 0;
@@ -259,16 +334,16 @@
     opacity: 1;
   }
   .btn-secondary {
-    border-color: var(--color-line);
-    background: rgb(20 23 28 / 0.7);
-    color: var(--color-text);
+    border-color: var(--c-line);
+    background: color-mix(in srgb, var(--c-surface) 70%, transparent);
+    color: var(--c-text);
     backdrop-filter: blur(6px);
   }
   .btn-secondary:hover {
-    border-color: rgb(242 169 59 / 0.6);
+    border-color: color-mix(in srgb, var(--c-accent) 60%, transparent);
   }
   .btn-ghost {
-    color: var(--color-accent);
+    color: var(--c-accent);
   }
   /* Sublinhado que cresce da esquerda. */
   .btn-ghost::after {
@@ -297,12 +372,16 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(90deg, rgb(242 169 59 / 0.08), transparent 70%);
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--c-accent) 8%, transparent),
+      transparent 70%
+    );
     opacity: 0;
     transition: opacity 0.5s var(--ease-soft);
   }
   .row-link:hover {
-    color: var(--color-accent);
+    color: var(--c-accent);
   }
   .row-link:hover::before {
     opacity: 1;
@@ -344,7 +423,7 @@
       opacity 0.35s var(--ease-soft);
   }
   .nav-bar {
-    box-shadow: 0 0 12px rgb(242 169 59 / 0.7);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--c-accent) 70%, transparent);
     transition:
       transform 0.7s var(--ease-soft),
       width 0.7s var(--ease-soft),
@@ -358,34 +437,38 @@
     transform: translateY(-4px) scale(1.4);
   }
   .btn-ghost:hover {
-    background: var(--color-accent-soft);
+    background: color-mix(in srgb, var(--c-accent) 13%, transparent);
   }
 
   .pill {
     display: inline-flex;
     align-items: center;
-    border: 1px solid var(--color-line);
+    border: 1px solid var(--c-line);
     border-radius: var(--radius-sm);
-    background: var(--color-surface-2);
+    background: var(--c-surface-2);
     padding: 0.2rem 0.6rem;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
     line-height: 1.4;
-    color: var(--color-text);
+    color: var(--c-text);
   }
   .pill-accent {
-    border-color: rgb(242 169 59 / 0.4);
-    background: var(--color-accent-soft);
-    color: var(--color-accent);
+    border-color: color-mix(in srgb, var(--c-accent) 40%, transparent);
+    background: color-mix(in srgb, var(--c-accent) 13%, transparent);
+    color: var(--c-accent);
   }
 
   /* Vidro fosco leve: deixa passar a luz ambiente sem perder o contraste do texto. */
   .card {
-    border: 1px solid rgb(38 43 51 / 0.85);
+    border: 1px solid color-mix(in srgb, var(--c-line) 85%, transparent);
     border-radius: var(--radius-lg);
-    background: linear-gradient(180deg, rgb(26 30 37 / 0.82), rgb(20 23 28 / 0.9));
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c-surface-2) 82%, transparent),
+      color-mix(in srgb, var(--c-surface) 90%, transparent)
+    );
     backdrop-filter: blur(10px);
-    box-shadow: inset 0 1px 0 rgb(236 233 225 / 0.04);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--c-text) 4%, transparent);
     transition:
       border-color 0.5s var(--ease-soft),
       box-shadow 0.5s var(--ease-soft),
@@ -393,10 +476,10 @@
   }
   .card-lift:hover {
     transform: translateY(-4px);
-    border-color: rgb(242 169 59 / 0.35);
+    border-color: color-mix(in srgb, var(--c-accent) 35%, transparent);
     box-shadow:
-      inset 0 1px 0 rgb(236 233 225 / 0.05),
-      0 24px 50px -28px rgb(242 169 59 / 0.35);
+      inset 0 1px 0 color-mix(in srgb, var(--c-text) 5%, transparent),
+      0 24px 50px -28px color-mix(in srgb, var(--c-accent) 35%, transparent);
   }
   @media (prefers-reduced-motion: reduce) {
     .card-lift:hover {
@@ -480,5 +563,23 @@
         opacity: 1;
       }
     }
+  }
+}
+
+/* Troca de tema com revelação circular a partir do botão (View Transitions API). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-reveal 0.65s var(--ease-soft);
+}
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+  to {
+    clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 50%) var(--vt-y, 50%));
   }
 }

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { track } from '../lib/analytics'
 import { LangContext, type Lang, type LangContextValue } from './context'
 import { en } from './en'
 import { pt } from './pt'
@@ -37,14 +38,19 @@ export function LangProvider({ children }: { children: ReactNode }) {
     setMeta('meta[name="twitter:description"]', t.meta.ogDescription)
   }, [lang, t])
 
-  const setLang = useCallback((next: Lang) => {
-    setLangState(next)
-    try {
-      localStorage.setItem(STORAGE_KEY, next)
-    } catch {
-      // preferência não persistida, sem impacto na navegação
-    }
-  }, [])
+  const setLang = useCallback(
+    (next: Lang) => {
+      if (next === lang) return
+      track('switch_lang')
+      setLangState(next)
+      try {
+        localStorage.setItem(STORAGE_KEY, next)
+      } catch {
+        // preferência não persistida, sem impacto na navegação
+      }
+    },
+    [lang],
+  )
 
   const toggleLang = useCallback(() => setLang(lang === 'pt' ? 'en' : 'pt'), [lang, setLang])
 

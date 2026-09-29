@@ -1,5 +1,6 @@
 import { alsoBuilt, projects } from '../data/projects'
 import { useT } from '../i18n/useT'
+import { BeforeAfter } from './BeforeAfter'
 import { ProjectCard } from './ProjectCard'
 import { Reveal } from './Reveal'
 import { SectionHeader } from './SectionHeader'
@@ -12,6 +13,10 @@ export function Projects() {
       <SectionHeader id="projetos" headingId="projetos-title" />
       <Reveal>
         <p className="mb-10 max-w-3xl text-lg text-text/80">{t.projects.lede}</p>
+      </Reveal>
+
+      <Reveal>
+        <BeforeAfter />
       </Reveal>
 
       <ul className="grid gap-5 md:grid-cols-2">

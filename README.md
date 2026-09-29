@@ -71,6 +71,20 @@ Configuração:
 
 `node --experimental-strip-types scripts/build-rag-index.ts --no-embed` grava os trechos sem embeddings (não precisa de chave).
 
+## Analytics
+
+O site usa o Vercel Web Analytics (`@vercel/analytics`), sem cookies e sem dado pessoal. O componente `<Analytics />` só carrega em produção na Vercel; em desenvolvimento não faz nada.
+
+1. Depois do primeiro deploy, no projeto da Vercel abra a aba **Analytics** e clique em **Enable**.
+2. Não há mais nada para configurar: as visualizações de página funcionam no plano gratuito.
+3. Os eventos customizados (`src/lib/analytics.ts`: `ask_question`, `copy_email`, `open_linkedin`, `open_github`, `open_palette`, `switch_lang`, `switch_theme`, `konami`, `boot_skipped`) podem exigir um plano pago; confira no painel. O texto das perguntas feitas ao terminal nunca é enviado.
+
+## Tema, abertura e extras
+
+- **Tema claro/escuro:** variáveis `--c-*` em `src/index.css` trocam por `html[data-theme]`. A escolha fica em `localStorage` (`theme`); sem escolha, segue o sistema ao vivo. Um script inline no `index.html` aplica o tema antes da primeira pintura. O terminal e a abertura são escuros nos dois temas de propósito (`.theme-dark-island`).
+- **Abertura (boot):** toca só na primeira visita (`localStorage` `booted`). `?boot` na URL força; o comando `reboot` no terminal repete. Não toca com redução de movimento.
+- **Easter eggs:** cada um é isolado e fácil de apagar. Comandos do terminal em `src/lib/extras.ts` (mais os textos em `terminal.out`/`terminal.extras` do i18n); Konami e chuva âmbar em `src/hooks/useKonami.ts` e `src/components/MatrixRain.tsx`; recado do console em `src/hooks/useConsoleBanner.ts`.
+
 ## Pendências antes de publicar
 
 - Descomentar e preencher o `<link rel="canonical">` em `index.html` com o domínio final.
@@ -78,4 +92,4 @@ Configuração:
 
 ## Acessibilidade
 
-Skip link, landmarks semânticos, foco visível, alvos de toque de 44px, `prefers-reduced-motion` respeitado (sem digitação, marquee, contagem, pulso ou traçado de diagramas), botão de pausar o marquee (WCAG 2.2.2) e contraste AA nos tokens de cor.
+Skip link, landmarks semânticos, foco visível, alvos de toque de 44px, `prefers-reduced-motion` respeitado (sem digitação, marquee, contagem, pulso ou traçado de diagramas), botão de pausar o marquee (WCAG 2.2.2) e contraste AA nos tokens de cor dos dois temas.

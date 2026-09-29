@@ -3,6 +3,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion'
 import { useTyping } from '../hooks/useTyping'
 import { GITHUB_PROJECTS_URL } from '../data/links'
 import { useT } from '../i18n/useT'
+import { track } from '../lib/analytics'
 import { ExternalLink } from './ExternalLink'
 import { Terminal } from './Terminal'
 
@@ -56,7 +57,11 @@ export function Hero() {
                 →
               </span>
             </a>
-            <ExternalLink href={GITHUB_PROJECTS_URL} className="btn btn-secondary">
+            <ExternalLink
+              href={GITHUB_PROJECTS_URL}
+              className="btn btn-secondary"
+              onClick={() => track('open_github')}
+            >
               {t.hero.ctaGithub}
               <span className="btn-arrow btn-arrow-up" aria-hidden="true">
                 ↗

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useReducedMotion } from '../hooks/useReducedMotion'
+import { subscribeTheme } from '../lib/theme'
 
 interface Particle {
   x: number
@@ -10,7 +11,6 @@ interface Particle {
   r: number
 }
 
-const ACCENT = '242, 169, 59'
 /** Distância máxima para ligar dois pontos entre si. */
 const LINK = 130
 /** Raio em que os pontos se ligam ao cursor. */
@@ -64,6 +64,15 @@ export function Backdrop() {
     let height = 0
     let fieldHeight = 0
     let particles: Particle[] = []
+    // Cor e opacidade das partículas vêm de variáveis CSS do tema; lidas só quando o tema muda.
+    let accent = '242, 169, 59'
+    let alpha = 1
+    const readColors = () => {
+      const styles = getComputedStyle(document.documentElement)
+      accent = styles.getPropertyValue('--c-particle').trim() || accent
+      alpha = Number(styles.getPropertyValue('--c-particle-alpha')) || 1
+    }
+    readColors()
     const pointer = { x: 0, y: 0, active: false }
     let frame = 0
     let pendingDraw = 0
@@ -109,7 +118,7 @@ export function Backdrop() {
           const b = visible[j]
           const d = Math.hypot(a.x - b.x, a.y - b.y)
           if (d < LINK) {
-            ctx.strokeStyle = `rgba(${ACCENT}, ${(1 - d / LINK) * 0.22})`
+            ctx.strokeStyle = `rgba(${accent}, ${(1 - d / LINK) * 0.22 * alpha})`
             ctx.lineWidth = 0.7
             ctx.beginPath()
             ctx.moveTo(a.x, a.y - top)
@@ -123,7 +132,7 @@ export function Backdrop() {
         for (const p of visible) {
           const d = Math.hypot(p.x - pointer.x, p.y - top - pointer.y)
           if (d < REACH) {
-            ctx.strokeStyle = `rgba(${ACCENT}, ${(1 - d / REACH) * 0.6})`
+            ctx.strokeStyle = `rgba(${accent}, ${(1 - d / REACH) * 0.6 * alpha})`
             ctx.lineWidth = 0.9
             ctx.beginPath()
             ctx.moveTo(pointer.x, pointer.y)
@@ -133,7 +142,7 @@ export function Backdrop() {
         }
       }
 
-      ctx.fillStyle = `rgba(${ACCENT}, 0.55)`
+      ctx.fillStyle = `rgba(${accent}, ${0.55 * alpha})`
       for (const p of visible) {
         ctx.beginPath()
         ctx.arc(p.x, p.y - top, p.r, 0, Math.PI * 2)
@@ -196,6 +205,10 @@ export function Backdrop() {
       pointer.active = false
       requestDraw()
     }
+    const unsubscribeTheme = subscribeTheme(() => {
+      readColors()
+      requestDraw()
+    })
     const onVisibility = () => (document.hidden ? stop() : start())
 
     // Canvas: pega também a página que carrega numa aba oculta (tamanho 0).
@@ -216,6 +229,7 @@ export function Backdrop() {
 
     return () => {
       stop()
+      unsubscribeTheme()
       cancelAnimationFrame(pendingDraw)
       observer.disconnect()
       window.removeEventListener('scroll', requestDraw)
@@ -227,9 +241,9 @@ export function Backdrop() {
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div className="absolute -top-48 -left-48 size-[46rem] rounded-full bg-accent/[0.11] blur-[120px]" />
-      <div className="absolute top-1/3 -right-48 size-[38rem] rounded-full bg-[#f2703b]/[0.08] blur-[140px]" />
-      <div className="absolute -bottom-56 left-1/4 size-[40rem] rounded-full bg-accent/[0.04] blur-[140px]" />
+      <div className="absolute -top-48 -left-48 size-[46rem] rounded-full bg-(--c-glow-a) blur-[120px]" />
+      <div className="absolute top-1/3 -right-48 size-[38rem] rounded-full bg-(--c-glow-b) blur-[140px]" />
+      <div className="absolute -bottom-56 left-1/4 size-[40rem] rounded-full bg-(--c-glow-c) blur-[140px]" />
       <canvas ref={canvasRef} className="absolute inset-0 size-full opacity-80" />
     </div>
   )

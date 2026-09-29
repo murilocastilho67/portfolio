@@ -1,5 +1,7 @@
 import type { SectionId } from '../data/sections'
 import type { Lang } from '../i18n/context'
+import { extraCommands, type DynamicId, type Effect } from './extras'
+import type { Theme } from './theme'
 // Mesmos limites que o backend valida; importar evita os dois lados divergirem.
 import { MAX_QUESTION, MIN_QUESTION } from '../../api/_lib/validate.ts'
 
@@ -15,12 +17,29 @@ export type OutputId =
   | 'langEn'
   | 'askUsage'
   | 'askInvalid'
+  | 'ls'
+  | 'coffee'
+  | 'sudoRm'
+  | 'exit'
+  | 'matrix'
+  | 'reboot'
+  | 'themeLight'
+  | 'themeDark'
+  | 'themeUsage'
   | 'unknown'
 
 export type CommandResult =
   | { type: 'clear' }
   | { type: 'ask'; question: string }
-  | { type: 'output'; output: OutputId; section?: SectionId; lang?: Lang }
+  | {
+      type: 'output'
+      output: OutputId | DynamicId
+      section?: SectionId
+      lang?: Lang
+      theme?: Theme
+      /** Efeito global disparado junto com a saída (chuva âmbar, abertura). */
+      effect?: Effect
+    }
 
 const sectionCommands: Record<string, { output: OutputId; section: SectionId }> = {
   sobre: { output: 'about', section: 'sobre' },
@@ -33,6 +52,13 @@ const sectionCommands: Record<string, { output: OutputId; section: SectionId }> 
   contato: { output: 'contact', section: 'contato' },
   contact: { output: 'contact', section: 'contato' },
 }
+
+const themeNames = new Map<string, Theme>([
+  ['light', 'light'],
+  ['claro', 'light'],
+  ['dark', 'dark'],
+  ['escuro', 'dark'],
+])
 
 /** Sem comando, uma linha com "?" no fim ou com 4+ palavras é tratada como pergunta. */
 const QUESTION_MIN_WORDS = 4
@@ -60,6 +86,17 @@ export function parseCommand(raw: string): CommandResult | null {
   if (input === 'sudo contratar' || input === 'sudo hire' || input === 'sudo hire me') {
     return { type: 'output', output: 'hire', section: 'contato' }
   }
+
+  const themed = /^(?:theme|tema)(?: (.+))?$/.exec(input)
+  if (themed) {
+    const theme = themeNames.get(themed[1] ?? '')
+    if (!theme) return { type: 'output', output: 'themeUsage' }
+    return { type: 'output', output: theme === 'light' ? 'themeLight' : 'themeDark', theme }
+  }
+  if (input === 'reboot') return { type: 'output', output: 'reboot', effect: 'boot' }
+
+  const extra = Object.hasOwn(extraCommands, input) ? extraCommands[input] : undefined
+  if (extra) return { type: 'output', ...extra }
 
   const asked = /^(?:ask|pergunte)(?: (.+))?$/i.exec(text)
   if (asked) return asked[1] ? askResult(asked[1]) : { type: 'output', output: 'askUsage' }

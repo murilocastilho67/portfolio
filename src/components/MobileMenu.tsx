@@ -4,6 +4,8 @@ import { useFocusTrap } from '../hooks/useFocusTrap'
 import { useScrollLock } from '../hooks/useScrollLock'
 import { useT } from '../i18n/useT'
 import { Icon } from './Icon'
+import { LangToggle } from './LangToggle'
+import { ThemeToggle } from './ThemeToggle'
 
 interface MobileMenuProps {
   id: string
@@ -34,14 +36,18 @@ export function MobileMenu({ id, open, active, onClose }: MobileMenuProps) {
         <span className="font-mono font-bold">
           murilo<span className="text-accent">.</span>dev
         </span>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label={t.nav.closeMenu}
-          className="inline-flex size-11 items-center justify-center rounded-md hover:bg-surface-2"
-        >
-          <Icon name="close" className="size-6" />
-        </button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <LangToggle />
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t.nav.closeMenu}
+            className="inline-flex size-11 items-center justify-center rounded-md hover:bg-surface-2"
+          >
+            <Icon name="close" className="size-6" />
+          </button>
+        </div>
       </div>
 
       <nav aria-label={t.nav.menuLabel} className="wrap flex flex-1 flex-col justify-center pb-16">
