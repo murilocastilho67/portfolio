@@ -1,0 +1,330 @@
+[
+  {
+    "id": "hero",
+    "section": "sobre",
+    "label_pt": "Sobre",
+    "label_en": "About",
+    "text": "Murilo Castilho. Foco atual: sistemas internos sob medida; IA aplicada (RAG em produção); automação ponta a ponta. Construo sistemas internos, automação e IA aplicada para operações reais — do dado bruto no ERP até a tela que a equipe usa todo dia. Disponível para projetos.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-resumo",
+    "section": "sobre",
+    "label_pt": "Sobre",
+    "label_en": "About",
+    "text": "Trabalho no meio do caminho entre quem opera o negócio e quem escreve o código: entendo a regra, modelo o dado e entrego o sistema.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-card-1",
+    "section": "sobre",
+    "label_pt": "Sobre · Dado que sustenta decisão",
+    "label_en": "About · Data that backs decisions",
+    "text": "Dado que sustenta decisão. Modelagem direto na fonte — ERP, planilha, sistema legado — em algo confiável o suficiente pra pagar bonificação ou orientar a operação.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-card-2",
+    "section": "sobre",
+    "label_pt": "Sobre · Automação que substitui trabalho manual",
+    "label_en": "About · Automation that replaces manual work",
+    "text": "Automação que substitui trabalho manual. Pipelines em Python que leem de sistemas de produção e entregam pronto o que hoje alguém monta na mão, planilha por planilha.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-card-3",
+    "section": "sobre",
+    "label_pt": "Sobre · Regra de negócio traduzida em código",
+    "label_en": "About · Business rules turned into code",
+    "text": "Regra de negócio traduzida em código. A regra que só existe na cabeça de quem está há anos na área vira cálculo, consulta ou tela que qualquer um consegue auditar.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-card-4",
+    "section": "sobre",
+    "label_pt": "Sobre · Sob medida, rápido",
+    "label_en": "About · Custom-built, fast",
+    "text": "Sob medida, rápido. Com IA como ferramenta de construção — não só de análise — dá pra entregar sistema pensado pra uma operação específica em dias, não meses.",
+    "embedding": []
+  },
+  {
+    "id": "stack-backend",
+    "section": "stack",
+    "label_pt": "Stack · Back-end & dados",
+    "label_en": "Stack · Back-end & data",
+    "text": "Back-end & dados: Python, FastAPI, SQL, MySQL, Oracle, pandas.",
+    "embedding": []
+  },
+  {
+    "id": "stack-frontend",
+    "section": "stack",
+    "label_pt": "Stack · Front-end",
+    "label_en": "Stack · Front-end",
+    "text": "Front-end: React, TypeScript, Vite, Tailwind, Streamlit.",
+    "embedding": []
+  },
+  {
+    "id": "stack-ai",
+    "section": "stack",
+    "label_pt": "Stack · IA aplicada",
+    "label_en": "Stack · Applied AI",
+    "text": "IA aplicada: LangChain, RAG, Embeddings, Gemini, Claude.",
+    "embedding": []
+  },
+  {
+    "id": "stack-bi",
+    "section": "stack",
+    "label_pt": "Stack · BI",
+    "label_en": "Stack · BI",
+    "text": "BI: Power BI, DAX.",
+    "embedding": []
+  },
+  {
+    "id": "stack-infra",
+    "section": "stack",
+    "label_pt": "Stack · Infra",
+    "label_en": "Stack · Infra",
+    "text": "Infra: Nginx, Git, GitHub, Windows Server/NSSM.",
+    "embedding": []
+  },
+  {
+    "id": "stack-construcao",
+    "section": "stack",
+    "label_pt": "Stack · Em construção",
+    "label_en": "Stack · In progress",
+    "text": "Em construção: Agentes autônomos multi-etapa; Automação ponta a ponta; Produtizar como oferta pra fora.",
+    "embedding": []
+  },
+  {
+    "id": "projetos-resumo",
+    "section": "projetos",
+    "label_pt": "Projetos",
+    "label_en": "Projects",
+    "text": "Mais de uma dezena de sistemas internos construídos do zero num grupo de transporte — do dado bruto até a tela que a equipe usa. Sem prints: dado de empresa não sai daqui, então cada projeto vem com o esquema de como funciona.",
+    "embedding": []
+  },
+  {
+    "id": "projeto-platform",
+    "section": "projetos",
+    "label_pt": "Projetos · Plataforma interna + assistente com IA",
+    "label_en": "Projects · Internal platform + AI assistant",
+    "text": "Plataforma interna + assistente com IA (controladoria, em produção). Portal que reúne as ferramentas da controladoria num só lugar, com login próprio e permissão por papel e por cidade. Nasceu como um chat que responde perguntas com base nos próprios painéis de BI: os painéis viram embeddings, o modelo busca neles antes de responder e respeita o que cada usuário pode ver. Também faz login único (SSO) para os sistemas que rodam dentro dele. Fluxo: Pergunta → Busca vetorial – filtro de permissão → LLM → Resposta – com fonte. Tecnologias: Python, Streamlit, LangChain, Gemini, RAG, MySQL.",
+    "embedding": []
+  },
+  {
+    "id": "projeto-routes",
+    "section": "projetos",
+    "label_pt": "Projetos · Gestão de Rotas",
+    "label_en": "Projects · Route Management",
+    "text": "Gestão de Rotas (logística, em produção). Substitui uma planilha de rotas de carga que várias pessoas editavam ao mesmo tempo. Separa rota, vigência e paradas, o que guarda o histórico de como cada rota rodou em cada período, e toda alteração passa por um fluxo de aprovação que compara o antes e o depois. Fluxo: Regional pede → Comparativo – antes / depois → Gestor aprova → Nova vigência. Tecnologias: React, FastAPI, Python, MySQL.",
+    "embedding": []
+  },
+  {
+    "id": "projeto-balance",
+    "section": "projetos",
+    "label_pt": "Projetos · Balanço Patrimonial e DRE",
+    "label_en": "Projects · Balance Sheet and Income Statement",
+    "text": "Balanço Patrimonial e DRE (contabilidade). Reconstrói o Balanço e a DRE a partir do balancete do ERP, no lugar da planilha manual. O de-para é feito por nível do plano de contas, então conta nova já nasce classificada. Validado linha a linha contra o fechamento oficial, sem divergência. Fluxo: Balancete → Árvore – plano de contas → De-para – por nó → BP / DRE. Tecnologias: Python, SQL, Oracle, Power BI.",
+    "embedding": []
+  },
+  {
+    "id": "projeto-payments",
+    "section": "projetos",
+    "label_pt": "Projetos · Pagamento a Terceiros",
+    "label_en": "Projects · Vendor Payments",
+    "text": "Pagamento a Terceiros (financeiro). Substitui a planilha de contas bancárias de fornecedores. Busca no ERP os títulos em aberto, trata cancelamento, parcelamento e abatimento de adiantamento, e gera a folha de dados para depósito em PDF, enviada por e-mail em lote. Fluxo: ERP – títulos em aberto → Regras – cancelado, parcela… → PDF – dados p/ depósito → E-mail – em lote. Tecnologias: React, FastAPI, Python, Oracle, MySQL.",
+    "embedding": []
+  },
+  {
+    "id": "projeto-planner",
+    "section": "projetos",
+    "label_pt": "Projetos · Planner",
+    "label_en": "Projects · Planner",
+    "text": "Planner (gestão, em produção). Planos de ação com kanban de tarefas e subtarefas, delegação, impedimentos, notificações e feed. Integrado ao portal com login único e em evolução contínua a partir do feedback de quem usa. Fluxo: Plano → Tarefas – kanban → Delegação → Notificação. Tecnologias: React, FastAPI, Python, MySQL.",
+    "embedding": []
+  },
+  {
+    "id": "projeto-crm",
+    "section": "projetos",
+    "label_pt": "Projetos · CRM de Cotações",
+    "label_en": "Projects · Quote CRM",
+    "text": "CRM de Cotações (comercial). Fila das cotações de frete que não viraram venda, onde o comercial registra motivo e histórico da tratativa. A regra de quais cotações entram na fila saiu da análise dos dados reais, não de suposição. A análise tem gráficos com filtro cruzado. Fluxo: Cotações → Fila – não fechadas → Motivo – + tratativa → Análise. Tecnologias: React, FastAPI, Python, MySQL.",
+    "embedding": []
+  },
+  {
+    "id": "projetos-tambem-1",
+    "section": "projetos",
+    "label_pt": "Projetos · também construí",
+    "label_en": "Projects · also built",
+    "text": "Também construí. Controle de Portaria: entrada e saída de veículos, colaboradores e visitantes por unidade. Controle de Aparelhos e Linhas: inventário de celulares, chips e ramais com auditoria. Parametrização Organizacional: hierarquia de filiais e gestores que alimenta os painéis de RH. Modelo de metas e bonificação: pontuação em cinco indicadores operacionais, com DAX otimizado pra consultas grandes. Modelo de RH: 42 tabelas, 102 medidas e 101 relacionamentos, documentado pra manutenção. ETL de interjornada: calcula o descanso obrigatório entre jornadas de motoristas direto do ERP.",
+    "embedding": []
+  },
+  {
+    "id": "projetos-tambem-2",
+    "section": "projetos",
+    "label_pt": "Projetos · também construí",
+    "label_en": "Projects · also built",
+    "text": "Também construí. Relatórios de bilhetagem: SQL que reconstrói informação que o sistema não entrega pronta. Parser de relatórios via WhatsApp: estrutura relatório comercial em texto solto e virou base de uma proposta de data mart. BI Unificado de Frequência: protótipo navegável que uniu 5 painéis de ponto em um. Pezinhos do Futuro: site e inscrição de um projeto social de artes marciais para crianças. Domos Barbearia: landing page freela, hospedagem gratuita, direto pro agendamento e WhatsApp.",
+    "embedding": []
+  },
+  {
+    "id": "carreira-resumo",
+    "section": "carreira",
+    "label_pt": "Carreira",
+    "label_en": "Career",
+    "text": "De rotina administrativa a quem constrói os sistemas da casa, sem parar de estudar no caminho.",
+    "embedding": []
+  },
+  {
+    "id": "carreira-bi",
+    "section": "carreira",
+    "label_pt": "Carreira · Full BI Analyst → sistemas internos e IA",
+    "label_en": "Career · Full BI Analyst → internal systems and AI",
+    "text": "Full BI Analyst → sistemas internos e IA, Grupo de transporte · unidade de passageiros (2024–atual). Sistemas full-stack (React + FastAPI) em produção; Assistente com IA (RAG) em produção; Automação direto nos sistemas de origem.",
+    "embedding": []
+  },
+  {
+    "id": "carreira-junior",
+    "section": "carreira",
+    "label_pt": "Carreira · Junior BI Analyst",
+    "label_en": "Career · Junior BI Analyst",
+    "text": "Junior BI Analyst, Grupo de transporte · unidade de passageiros (2023–2024). Dashboards em Power BI; SQL para coleta de dados; ETL em Python.",
+    "embedding": []
+  },
+  {
+    "id": "carreira-traffic",
+    "section": "carreira",
+    "label_pt": "Carreira · Analista de Tráfego",
+    "label_en": "Career · Traffic Analyst",
+    "text": "Analista de Tráfego, Grupo de transporte · unidade de passageiros (2022–2023).",
+    "embedding": []
+  },
+  {
+    "id": "carreira-admin",
+    "section": "carreira",
+    "label_pt": "Carreira · Auxiliar Administrativo",
+    "label_en": "Career · Administrative Assistant",
+    "text": "Auxiliar Administrativo, Grupo de transporte · unidade de cargas (2019–2022).",
+    "embedding": []
+  },
+  {
+    "id": "carreira-formacao",
+    "section": "carreira",
+    "label_pt": "Carreira · Formação",
+    "label_en": "Career · Education",
+    "text": "Formação: Análise e Desenvolvimento de Software na UNIARP (2023–2025); Engenharia de Software na UNOPAR (2022–2023).",
+    "embedding": []
+  },
+  {
+    "id": "processo-1",
+    "section": "processo",
+    "label_pt": "Como eu trabalho · Entender a regra",
+    "label_en": "How I work · Understand the rule",
+    "text": "Entender a regra. Conversar com quem opera e achar onde o dado nasce.",
+    "embedding": []
+  },
+  {
+    "id": "processo-2",
+    "section": "processo",
+    "label_pt": "Como eu trabalho · Modelar o dado",
+    "label_en": "How I work · Model the data",
+    "text": "Modelar o dado. Fonte única, sem planilha no meio.",
+    "embedding": []
+  },
+  {
+    "id": "processo-3",
+    "section": "processo",
+    "label_pt": "Como eu trabalho · Construir rápido",
+    "label_en": "How I work · Build fast",
+    "text": "Construir rápido. Sistema sob medida, entregue em fases curtas e validado com quem usa.",
+    "embedding": []
+  },
+  {
+    "id": "processo-4",
+    "section": "processo",
+    "label_pt": "Como eu trabalho · IA em cima",
+    "label_en": "How I work · AI on top",
+    "text": "IA em cima. Assistentes e automação sobre dado confiável.",
+    "embedding": []
+  },
+  {
+    "id": "processo-cliente",
+    "section": "processo",
+    "label_pt": "Como eu trabalho",
+    "label_en": "How I work",
+    "text": "Empresa de porte médio, sem time de TI próprio, que hoje paga caro por sistema genérico ou nem tem sistema — passa a caber um projeto sob medida, construído rápido, porque a IA multiplica a velocidade de quem já entende de dado e de regra de negócio.",
+    "embedding": []
+  },
+  {
+    "id": "contato",
+    "section": "contato",
+    "label_pt": "Contato",
+    "label_en": "Contact",
+    "text": "Vaga, freela ou só trocar ideia sobre dado e IA aplicada — respondo rápido. E-mail: murilocastilho67@gmail.com. LinkedIn: https://www.linkedin.com/in/murilocastilho67/. GitHub (projetos): https://github.com/murilocastilh0. GitHub (pessoal): https://github.com/murilocastilho67.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-mim-1",
+    "section": "sobre",
+    "label_pt": "Sobre",
+    "label_en": "About",
+    "text": "Quem é. Murilo Castilho mora em Santa Catarina, Brasil. Trabalha desde 2019 em um grupo de transporte, com unidades de cargas e de passageiros.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-mim-2",
+    "section": "carreira",
+    "label_pt": "Carreira",
+    "label_en": "Career",
+    "text": "Trajetória. Murilo começou como Auxiliar Administrativo (2019–2022), na unidade de cargas. Depois foi Analista de Tráfego (2022–2023), na unidade de passageiros. Em seguida foi Junior BI Analyst (2023–2024) e, desde 2024, é Full BI Analyst. Hoje constrói sistemas internos full-stack e IA aplicada.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-mim-3",
+    "section": "carreira",
+    "label_pt": "Carreira",
+    "label_en": "Career",
+    "text": "Formação. Murilo cursa Análise e Desenvolvimento de Software na UNIARP (2023–2025). Antes, fez Engenharia de Software na UNOPAR (2022–2023).",
+    "embedding": []
+  },
+  {
+    "id": "sobre-mim-4",
+    "section": "projetos",
+    "label_pt": "Projetos",
+    "label_en": "Projects",
+    "text": "De painéis de BI para sistemas. Murilo saiu de BI e painéis para sistemas. Construiu do zero mais de 12 sistemas internos e colocou em produção 1 assistente de IA com RAG: um chat que responde com base nos painéis de BI, respeitando a permissão de cada usuário.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-mim-5",
+    "section": "processo",
+    "label_pt": "Como eu trabalho",
+    "label_en": "How I work",
+    "text": "Como trabalha. Murilo entende a regra com quem opera o negócio, modela o dado direto na fonte (sem planilha no meio) e entrega em fases curtas, validadas com quem usa. Usa IA como ferramenta de construção para entregar em dias, não em meses. Quando encontra dado inconsistente, aponta o problema na origem em vez de mascarar.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-mim-6",
+    "section": "contato",
+    "label_pt": "Contato",
+    "label_en": "Contact",
+    "text": "Disponibilidade e contato. Murilo está disponível para vagas, freelas e projetos sob medida, e para trocar ideia sobre dado e IA aplicada. Contato: e-mail murilocastilho67@gmail.com, LinkedIn linkedin.com/in/murilocastilho67, GitHub github.com/murilocastilh0 (projetos) e github.com/murilocastilho67 (pessoal). Ele responde rápido. Não há telefone nem endereço públicos.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-mim-7",
+    "section": "sobre",
+    "label_pt": "Sobre",
+    "label_en": "About",
+    "text": "Este site. O site é feito com React, TypeScript, Vite e Tailwind. O próprio assistente usa RAG com Gemini: embeddings dos trechos do site, busca por similaridade e geração da resposta com as fontes citadas.",
+    "embedding": []
+  },
+  {
+    "id": "sobre-mim-8",
+    "section": "processo",
+    "label_pt": "Como eu trabalho",
+    "label_en": "How I work",
+    "text": "Cliente ideal. Murilo atende melhor empresas de porte médio que não têm time de TI próprio e que rodam processos em planilha ou pagam caro por um sistema genérico.",
+    "embedding": []
+  }
+]

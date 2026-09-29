@@ -1,18 +1,26 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { useTyping } from '../hooks/useTyping'
 import { useT } from '../i18n/useT'
+import { ask, AskError, type AskErrorCode, type AskSource } from '../lib/ask'
 import { parseCommand, type OutputId } from '../lib/commands'
 import { scrollToSection } from '../lib/scroll'
 
-interface HistoryEntry {
-  id: number
-  command: string
-  output: OutputId
+interface AskState {
+  status: 'searching' | 'streaming' | 'done' | 'error'
+  count: number
+  sources: AskSource[]
+  answer: string
+  error: AskErrorCode | null
 }
+
+type HistoryEntry =
+  | { id: number; kind: 'output'; command: string; output: OutputId }
+  | { id: number; kind: 'ask'; command: string; ask: AskState }
 
 function lineTone(line: string): string {
   if (line.startsWith('✓')) return 'text-ok'
+  if (line.startsWith('✗')) return 'text-accent'
   if (line.startsWith('↳')) return 'text-muted'
   return 'text-text/90'
 }
@@ -25,6 +33,56 @@ function OutputLines({ lines }: { lines: readonly string[] }) {
   ))
 }
 
+const Cursor = () => (
+  <span className="animate-blink text-accent" aria-hidden="true">
+    ▌
+  </span>
+)
+
+/** Resposta do assistente: linhas de progresso, texto em stream e fontes clicáveis. */
+function AskOutput({ state }: { state: AskState }) {
+  const { t } = useT()
+  const labels = t.terminal.ask
+  const working = state.status === 'searching' || state.status === 'streaming'
+  const progress = [labels.searching]
+  if (state.sources.length > 0) {
+    progress.push(
+      state.count === 1 ? labels.foundOne : labels.foundMany.replace('{n}', String(state.count)),
+    )
+  }
+
+  return (
+    <>
+      <OutputLines lines={progress} />
+      {(state.answer || working) && (
+        <p className="break-words whitespace-pre-wrap text-text/90">
+          {state.answer}
+          {working && <Cursor />}
+        </p>
+      )}
+      {state.error && <OutputLines lines={[labels.errors[state.error]]} />}
+      {state.status === 'done' && state.sources.length > 0 && (
+        <p className="break-words">
+          <span className="text-muted">{labels.sources}</span>{' '}
+          {state.sources.map((source, i) => (
+            <Fragment key={source.label}>
+              {i > 0 && <span className="text-muted">, </span>}
+              <button
+                type="button"
+                onClick={() => scrollToSection(source.id)}
+                aria-label={`${labels.sourceLabel}: ${source.label}`}
+                className="cursor-pointer rounded-sm text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent"
+              >
+                {source.label}
+              </button>
+            </Fragment>
+          ))}
+        </p>
+      )}
+    </>
+  )
+}
+
 const Prompt = () => (
   <span className="text-accent" aria-hidden="true">
     ${' '}
@@ -32,14 +90,18 @@ const Prompt = () => (
 )
 
 export function Terminal() {
-  const { t, setLang } = useT()
+  const { t, lang, setLang } = useT()
   const reduced = useReducedMotion()
   const bodyRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const abortRef = useRef<AbortController | null>(null)
+  const restoreFocus = useRef(false)
   const nextId = useRef(0)
   const [revealed, setRevealed] = useState(0)
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [cleared, setCleared] = useState(false)
   const [value, setValue] = useState('')
+  const [busy, setBusy] = useState(false)
 
   const demoPhrases = useMemo(() => [t.terminal.demoCommand], [t.terminal.demoCommand])
   const typing = useTyping(demoPhrases, { animate: !reduced })
@@ -57,24 +119,86 @@ export function Terminal() {
   useEffect(() => {
     const body = bodyRef.current
     if (body) body.scrollTop = body.scrollHeight
-  }, [history.length, shown, cleared])
+  }, [history, shown, cleared])
+
+  // Sai da tela com pergunta em andamento: cancela a requisição.
+  useEffect(() => {
+    const pending = abortRef
+    return () => pending.current?.abort()
+  }, [])
+
+  // O input desabilitado perde o foco; ao terminar a resposta de uma pergunta digitada, ele volta.
+  useEffect(() => {
+    if (!busy && restoreFocus.current) {
+      restoreFocus.current = false
+      inputRef.current?.focus()
+    }
+  }, [busy])
+
+  function runAsk(command: string, question: string) {
+    const controller = new AbortController()
+    abortRef.current = controller
+    const id = nextId.current++
+    const patch = (update: (state: AskState) => AskState) =>
+      setHistory((prev) =>
+        prev.map((entry) =>
+          entry.id === id && entry.kind === 'ask' ? { ...entry, ask: update(entry.ask) } : entry,
+        ),
+      )
+
+    setBusy(true)
+    setHistory((prev) => [
+      ...prev,
+      {
+        id,
+        kind: 'ask',
+        command,
+        ask: { status: 'searching', count: 0, sources: [], answer: '', error: null },
+      },
+    ])
+
+    ask(question, lang, controller.signal, {
+      onSources: (count, sources) => patch((s) => ({ ...s, status: 'streaming', count, sources })),
+      onDelta: (text) => patch((s) => ({ ...s, answer: s.answer + text })),
+    })
+      .then(() => patch((s) => ({ ...s, status: 'done' })))
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return
+        const code = error instanceof AskError ? error.code : 'network'
+        patch((s) => ({ ...s, status: 'error', error: code }))
+      })
+      .finally(() => {
+        if (abortRef.current !== controller) return
+        abortRef.current = null
+        setBusy(false)
+      })
+  }
 
   function onSubmit(event: FormEvent) {
     event.preventDefault()
+    if (busy) return
     const result = parseCommand(value)
     setValue('')
     if (!result) return
 
     if (result.type === 'clear') {
+      abortRef.current?.abort()
+      abortRef.current = null
+      setBusy(false)
       setCleared(true)
       setHistory([])
+      return
+    }
+    if (result.type === 'ask') {
+      restoreFocus.current = true
+      runAsk(value.trim(), result.question)
       return
     }
     if (result.lang) setLang(result.lang)
     if (result.section) scrollToSection(result.section)
     setHistory((prev) => [
       ...prev,
-      { id: nextId.current++, command: value.trim(), output: result.output },
+      { id: nextId.current++, kind: 'output', command: value.trim(), output: result.output },
     ])
   }
 
@@ -110,7 +234,8 @@ export function Terminal() {
           </p>
         )}
 
-        <div aria-live="polite">
+        {/* aria-busy: o leitor de tela espera o fim do stream e lê a resposta uma vez só. */}
+        <div aria-live="polite" aria-busy={busy}>
           {!cleared && <OutputLines lines={demoLines.slice(0, shown)} />}
           {history.map((entry) => (
             <div key={entry.id} className="mt-2">
@@ -118,7 +243,11 @@ export function Terminal() {
                 <Prompt />
                 <span className="text-text">{entry.command}</span>
               </p>
-              <OutputLines lines={t.terminal.out[entry.output]} />
+              {entry.kind === 'ask' ? (
+                <AskOutput state={entry.ask} />
+              ) : (
+                <OutputLines lines={t.terminal.out[entry.output]} />
+              )}
             </div>
           ))}
         </div>
@@ -133,20 +262,37 @@ export function Terminal() {
               {t.terminal.inputLabel}
             </label>
             <input
+              ref={inputRef}
               id="terminal-input"
               type="text"
               value={value}
               onChange={(event) => setValue(event.target.value)}
+              disabled={busy}
               placeholder={t.terminal.placeholder}
               autoComplete="off"
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
               enterKeyHint="send"
-              className="min-h-8 min-w-0 flex-1 bg-transparent text-base text-text caret-accent placeholder:text-muted focus-visible:outline-none sm:text-[13px]"
+              className="min-h-8 min-w-0 flex-1 bg-transparent text-base text-text caret-accent placeholder:text-muted focus-visible:outline-none disabled:cursor-progress sm:text-[13px]"
             />
           </form>
         )}
+      </div>
+
+      <div className="flex flex-wrap gap-2 border-t border-line p-3">
+        <span className="sr-only">{t.terminal.chipsLabel}</span>
+        {t.terminal.chips.map((question) => (
+          <button
+            key={question}
+            type="button"
+            disabled={!ready || busy}
+            onClick={() => runAsk(`ask "${question}"`, question)}
+            className="min-h-11 cursor-pointer rounded-md border border-line bg-surface px-3 font-mono text-xs text-muted transition-colors hover:border-accent/50 hover:text-text disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-9"
+          >
+            {question}
+          </button>
+        ))}
       </div>
     </div>
   )
