@@ -101,7 +101,7 @@ export default function App() {
       </a>
       <Nav onOpenPalette={openPalette} />
       <main id="conteudo" tabIndex={-1} className="outline-none">
-        <Hero />
+        <Hero booting={bootRun !== null} />
         <Stats />
         <Marquee />
         <About />

@@ -13,7 +13,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
     <Reveal delay={(index % 2) * 80} className="h-full">
       <article className="card card-lift flex h-full flex-col p-5 sm:p-6">
         <div className="mb-4 flex flex-col gap-2 font-mono text-xs">
-          <span className="tracking-wider text-accent uppercase">
+          <span data-morph-tag className="tracking-wider text-accent uppercase">
             {String(index + 1).padStart(2, '0')} · {project.stack.join(' · ')}
           </span>
           <div className="flex min-h-6 items-center gap-3">

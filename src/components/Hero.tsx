@@ -5,9 +5,11 @@ import { GITHUB_PROJECTS_URL } from '../data/links'
 import { useT } from '../i18n/useT'
 import { track } from '../lib/analytics'
 import { ExternalLink } from './ExternalLink'
+import { KineticText } from './KineticText'
 import { Terminal } from './Terminal'
 
-export function Hero() {
+/** `booting`: a abertura em tela cheia está por cima; o título só decodifica depois dela. */
+export function Hero({ booting }: { booting: boolean }) {
   const { t } = useT()
   const reduced = useReducedMotion()
   const role = useTyping(t.hero.roles, { loop: true, animate: !reduced })
@@ -34,8 +36,8 @@ export function Hero() {
               {t.hero.name}
             </span>
             <span className="block text-[clamp(2.25rem,5.4vw,3.3rem)] leading-[1.02] font-bold tracking-tighter">
-              <span className="block">{t.hero.headline1}</span>
-              <span className="block text-accent">{t.hero.headline2}</span>
+              <KineticText text={t.hero.headline1} className="block" hold={booting} />
+              <KineticText text={t.hero.headline2} className="block text-accent" hold={booting} />
             </span>
           </h1>
 

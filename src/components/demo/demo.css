@@ -182,46 +182,6 @@
   color: var(--d-text);
 }
 
-/* ---------- Esqueleto ---------- */
-.dm-skeleton {
-  display: flex;
-  flex: 1;
-  min-width: 0;
-}
-.dm-sk-side {
-  width: 200px;
-  background: var(--d-surface);
-  border-right: 1px solid var(--d-line);
-}
-.dm-sk-main {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 14px;
-  padding: 24px;
-}
-.dm-sk-bar {
-  display: block;
-  height: 16px;
-  border-radius: 6px;
-  background: var(--d-line);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .dm-sk-bar {
-    animation: dm-pulse 1.2s ease-in-out infinite;
-  }
-}
-@keyframes dm-pulse {
-  50% {
-    opacity: 0.45;
-  }
-}
-@media (max-width: 639px) {
-  .dm-sk-side {
-    display: none;
-  }
-}
-
 /* ---------- Layout do app ---------- */
 .dm-app {
   position: relative;

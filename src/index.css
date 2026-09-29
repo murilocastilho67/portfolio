@@ -583,3 +583,114 @@ html[data-theme='light'] {
     clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 50%) var(--vt-y, 50%));
   }
 }
+
+/*
+ * "Card vira o sistema": o card e a janela da demonstração compartilham o nome demo-morph. A classe
+ * vt-demo em <html> (posta só durante essa transição) tira a revelação circular do tema do fundo,
+ * então as duas transições convivem: sem a classe, vale o bloco do tema acima.
+ */
+html.vt-demo::view-transition-old(root),
+html.vt-demo::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+/* Ao fechar, o painel escuro some esmaecendo (o novo fundo entra por cima do antigo). */
+html.vt-demo-out::view-transition-new(root) {
+  animation: vt-fade-in 0.4s var(--ease-soft) both;
+}
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+::view-transition-group(demo-morph),
+::view-transition-group(demo-morph-tag) {
+  animation-duration: 0.52s;
+  animation-timing-function: var(--ease-soft);
+  overflow: clip;
+}
+/* Formatos diferentes (card x janela): a imagem preenche o grupo sem esticar; o antigo fica opaco
+   por baixo e some no fim, o novo entra por cima. */
+::view-transition-old(demo-morph),
+::view-transition-new(demo-morph),
+::view-transition-old(demo-morph-tag),
+::view-transition-new(demo-morph-tag) {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: left top;
+  mix-blend-mode: normal;
+  animation-duration: 0.52s;
+  animation-timing-function: var(--ease-soft);
+}
+::view-transition-old(demo-morph),
+::view-transition-old(demo-morph-tag) {
+  animation-name: vt-morph-out;
+}
+::view-transition-new(demo-morph),
+::view-transition-new(demo-morph-tag) {
+  animation-name: vt-morph-in;
+}
+@keyframes vt-morph-out {
+  40% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-morph-in {
+  from {
+    opacity: 0;
+  }
+  60%,
+  to {
+    opacity: 1;
+  }
+}
+
+/*
+ * Títulos cinéticos (KineticText). Cada palavra é um inline-block com um "fantasma" invisível
+ * (::before com a própria palavra) no peso máximo: ele reserva a largura, então o peso reativo ao
+ * cursor e a decodificação nunca mudam a quebra de linha. Pseudo-elemento e não um nó: nó em bloco
+ * separaria as palavras por quebras de linha ao copiar o título. O nível 0..1 de cada letra vem de
+ * JS em --kt-t.
+ */
+.kt {
+  --kt-base: 550;
+  --kt-peak: 700;
+}
+.kt-w {
+  display: inline-block;
+  white-space: nowrap;
+}
+.kt-w::before {
+  content: attr(data-word);
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+  font-variation-settings: 'wght' var(--kt-peak);
+}
+.kt-c {
+  position: relative;
+  font-variation-settings: 'wght'
+    calc(var(--kt-base) + (var(--kt-peak) - var(--kt-base)) * var(--kt-t, 0));
+}
+/* Decodificando: a letra real (transparente) só dá o tamanho; o símbolo fica centrado sobre ela até travar. */
+.kt[data-scramble] .kt-c:not([data-locked]) .kt-r {
+  color: transparent;
+}
+.kt-g {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  font-family: var(--font-mono);
+  font-style: normal;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
