@@ -1,0 +1,67 @@
+import { useReducedMotion } from '../hooks/useReducedMotion'
+import { useTyping } from '../hooks/useTyping'
+import { GITHUB_PROJECTS_URL } from '../data/links'
+import { useT } from '../i18n/useT'
+import { ExternalLink } from './ExternalLink'
+import { Terminal } from './Terminal'
+
+export function Hero() {
+  const { t } = useT()
+  const reduced = useReducedMotion()
+  const role = useTyping(t.hero.roles, { loop: true, animate: !reduced })
+
+  return (
+    <section id="inicio" className="wrap pt-12 pb-16 sm:pt-16 lg:pt-24">
+      <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
+        <div>
+          <p className="mb-6 inline-flex max-w-full items-center rounded-md border border-line bg-surface px-3 py-1.5 font-mono text-[13px]">
+            <span className="truncate">
+              <span className="text-ok">murilo@castilho</span>
+              <span className="text-muted">:~$</span> {t.hero.whoami}
+            </span>
+            <span className="ml-1 animate-blink text-accent" aria-hidden="true">
+              ▌
+            </span>
+          </p>
+
+          <h1 className="text-[clamp(3.25rem,13vw,7.5rem)] leading-[0.95] font-bold tracking-tighter">
+            <span className="block">{t.hero.name1}</span>
+            <span className="block text-accent">{t.hero.name2}</span>
+          </h1>
+
+          <p className="mt-6 min-h-8 font-mono text-base text-accent sm:text-xl">
+            <span aria-hidden="true">
+              {'> '}
+              {role.text}
+              <span className="animate-blink">_</span>
+            </span>
+            <span className="sr-only">
+              {t.hero.rolesLabel}: {t.hero.roles.join(', ')}
+            </span>
+          </p>
+
+          <p className="mt-5 max-w-xl text-lg text-text/80">{t.hero.lede}</p>
+
+          <p className="mt-6 inline-flex items-center gap-2.5 rounded-full border border-line bg-surface px-3.5 py-1.5 font-mono text-[13px]">
+            <span className="size-2.5 animate-pulse-ring rounded-full bg-ok" aria-hidden="true" />
+            {t.hero.status}
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a href="#projetos" className="btn btn-primary">
+              {t.hero.ctaProjects}
+            </a>
+            <ExternalLink href={GITHUB_PROJECTS_URL} className="btn btn-secondary">
+              {t.hero.ctaGithub}
+            </ExternalLink>
+            <a href="#contato" className="btn btn-ghost">
+              {t.hero.ctaContact}
+            </a>
+          </div>
+        </div>
+
+        <Terminal />
+      </div>
+    </section>
+  )
+}
