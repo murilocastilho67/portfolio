@@ -110,8 +110,11 @@ export default function DemoDialog({ project, origin, onClose }: DemoDialogProps
   }, [])
 
   return createPortal(
+    // data-lenis-prevent: com o Lenis pausado (scroll lock), ele cancela todo gesto de rolagem fora
+    // de áreas marcadas; sem isso, toque e roda não rolam nada dentro da demo.
     <div
       role="presentation"
+      data-lenis-prevent
       className="dm-overlay"
       onMouseDown={(event) => event.target === event.currentTarget && onClose()}
     >
